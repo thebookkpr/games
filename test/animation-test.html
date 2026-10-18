@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Animation Test</title>
+<style>
+:root{
+  --bg:#f3f1f8; --ink:#1d1b2e; --muted:#6b6785; --panel:#ffffff; --line:#d9d5e8;
+  --a:#5b4bdb; --b:#e8478b; --c:#14a38b;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#14122a; --ink:#ece9fb; --muted:#9a95ba; --panel:#1e1b3a; --line:#34305a;
+    --a:#8f82ff; --b:#ff6fa9; --c:#3fd3b8;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#14122a; --ink:#ece9fb; --muted:#9a95ba; --panel:#1e1b3a; --line:#34305a;
+  --a:#8f82ff; --b:#ff6fa9; --c:#3fd3b8;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; min-height:100vh; background:var(--bg); color:var(--ink);
+  font-family:Georgia,"Times New Roman",serif;
+  display:flex; flex-direction:column; align-items:center; gap:18px;
+  padding:28px 18px 36px;
+}
+h1{font-size:1.7rem; font-weight:400; margin:0; letter-spacing:.01em}
+p{margin:0; color:var(--muted); font-size:.95rem; text-align:center; max-width:34ch; line-height:1.5}
+.stage{
+  width:100%; max-width:420px; aspect-ratio:1/1;
+  background:var(--panel); border:1px solid var(--line); border-radius:18px;
+  overflow:hidden; touch-action:none;
+}
+canvas{width:100%; height:100%; display:block}
+.row{display:flex; gap:10px}
+button{
+  font:inherit; font-size:.95rem; color:var(--ink); background:var(--panel);
+  border:1px solid var(--line); border-radius:999px; padding:10px 20px; cursor:pointer;
+  transition:transform .15s ease, border-color .15s ease;
+}
+button:hover{border-color:var(--a)}
+button:active{transform:scale(.95)}
+button:focus-visible{outline:2px solid var(--a); outline-offset:2px}
+</style>
+</head>
+<body>
+<h1>Animation Test</h1>
+<p>Three orbiting dots that follow your finger or cursor. Runs fully offline.</p>
+<div class="stage"><canvas id="c" aria-label="Orbiting dots animation"></canvas></div>
+<div class="row">
+  <button id="toggle" type="button">Pause</button>
+  <button id="speed" type="button">Speed: 1x</button>
+</div>
+<script>
+(function(){
+  var canvas=document.getElementById('c'), ctx=canvas.getContext('2d');
+  var W=0,H=0,dpr=1, running=true, speeds=[1,2,0.5], si=0, t=0, last=0;
+  var target={x:.5,y:.5}, center={x:.5,y:.5};
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){running=false;document.getElementById('toggle').textContent='Play';}
+
+  function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function resize(){
+    var r=canvas.getBoundingClientRect(); dpr=window.devicePixelRatio||1;
+    W=canvas.width=Math.round(r.width*dpr); H=canvas.height=Math.round(r.height*dpr);
+  }
+  function move(e){
+    var r=canvas.getBoundingClientRect();
+    target.x=(e.clientX-r.left)/r.width; target.y=(e.clientY-r.top)/r.height;
+  }
+  canvas.addEventListener('pointermove',move);
+  canvas.addEventListener('pointerdown',move);
+  window.addEventListener('resize',resize);
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    center.x+=(target.x-center.x)*.08; center.y+=(target.y-center.y)*.08;
+    var cx=center.x*W, cy=center.y*H, u=Math.min(W,H);
+    var cols=[css('--a'),css('--b'),css('--c')];
+    ctx.strokeStyle=css('--line'); ctx.lineWidth=dpr;
+    for(var i=0;i<3;i++){
+      var rad=u*(.12+i*.09);
+      ctx.beginPath(); ctx.arc(cx,cy,rad,0,Math.PI*2); ctx.stroke();
+      var ang=t*(1.4-i*.35)+i*2.1;
+      var x=cx+Math.cos(ang)*rad, y=cy+Math.sin(ang)*rad;
+      ctx.fillStyle=cols[i]; ctx.beginPath(); ctx.arc(x,y,u*(.035-i*.005),0,Math.PI*2); ctx.fill();
+    }
+    ctx.fillStyle=css('--ink'); ctx.beginPath(); ctx.arc(cx,cy,u*.012,0,Math.PI*2); ctx.fill();
+  }
+  function frame(now){
+    var dt=Math.min((now-last)/1000,.05); last=now;
+    if(running) t+=dt*speeds[si];
+    draw(); requestAnimationFrame(frame);
+  }
+  resize(); requestAnimationFrame(function(n){last=n;frame(n);});
+
+  document.getElementById('toggle').onclick=function(){
+    running=!running; this.textContent=running?'Pause':'Play';
+  };
+  document.getElementById('speed').onclick=function(){
+    si=(si+1)%speeds.length; this.textContent='Speed: '+speeds[si]+'x';
+  };
+})();
+</script>
+</body>
+</html>
