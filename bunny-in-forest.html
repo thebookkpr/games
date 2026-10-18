@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bunny in the Forest</title>
+<style>
+:root{
+  --bg:#f4f1ea; --ink:#22202e; --muted:#6d6a7c; --line:#d9d5e8;
+  --sky:#d3ebe1; --far:#a6cdb7; --mid:#64a182; --ground:#3e7d4a; --dirt:#6b4f35;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#14122a; --ink:#ece9fb; --muted:#9a95ba; --line:#34305a;
+    --sky:#172a2e; --far:#1f3f3d; --mid:#1c5444; --ground:#1f4d33; --dirt:#3a2b20;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#14122a; --ink:#ece9fb; --muted:#9a95ba; --line:#34305a;
+  --sky:#172a2e; --far:#1f3f3d; --mid:#1c5444; --ground:#1f4d33; --dirt:#3a2b20;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{margin:0}
+body{
+  min-height:100vh; background:var(--bg); color:var(--ink);
+  font-family:Georgia,"Times New Roman",serif;
+  display:flex; flex-direction:column; align-items:center; gap:14px;
+  padding:24px 16px 32px; user-select:none; -webkit-user-select:none;
+}
+h1{font-size:1.6rem; font-weight:400; margin:0}
+p{margin:0; color:var(--muted); font-size:.95rem; text-align:center; line-height:1.45; max-width:36ch}
+.stage{
+  width:100%; max-width:380px; aspect-ratio:3/4; border-radius:18px; overflow:hidden;
+  border:1px solid var(--line); touch-action:none; cursor:pointer;
+}
+canvas{width:100%; height:100%; display:block; touch-action:none}
+</style>
+</head>
+<body>
+<h1>Bunny in the Forest</h1>
+<p>Press and hold to jump. Hold longer to jump higher. Land on stumps and collect 30 carrots.</p>
+<div class="stage"><canvas id="c" aria-label="Bunny platformer game"></canvas></div>
+<script>
+(function(){
+  var LW=360, LH=480, GROUND=400, SPEED=150, GOAL=30;
+  var canvas=document.getElementById('c'), ctx=canvas.getContext('2d'), dpr=1;
+  function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function resize(){
+    var r=canvas.getBoundingClientRect(); dpr=window.devicePixelRatio||1;
+    canvas.width=Math.round(r.width*dpr); canvas.height=Math.round(r.height*dpr);
+  }
+  window.addEventListener('resize',resize); resize();
+
+  var G=1800, G_HOLD=700, V0=-380, MAX_HOLD=.3;
+  var runT=0, p, blocks, carrots, pops, count, level=1, state='ready', held=false, holdT=0, spawnT, scroll=0, last=0;
+
+  function reset(){
+    p={x:70,y:GROUND-34,w:34,h:34,vy:0,ground:true,squash:0};
+    blocks=[]; carrots=[]; pops=[]; count=0; spawnT=.8; holdT=0; held=false;
+    // a few easy carrots to begin
+    carrots.push({x:LW+60,y:GROUND-18},{x:LW+100,y:GROUND-18});
+  }
+  reset();
+
+  function press(){
+    if(state==='won'){level++; reset(); state='play'; return;}
+    if(state==='ready'){state='play';}
+    held=true;
+    if(p.ground){p.vy=V0; p.ground=false; holdT=0; p.squash=-.25;}
+  }
+  function release(){held=false;}
+
+  canvas.addEventListener('pointerdown',function(e){e.preventDefault(); press();});
+  window.addEventListener('pointerup',release);
+  window.addEventListener('pointercancel',release);
+  window.addEventListener('keydown',function(e){if(e.code==='Space'&&!e.repeat){e.preventDefault(); press();}});
+  window.addEventListener('keyup',function(e){if(e.code==='Space')release();});
+
+  function update(dt){
+    scroll+=dt*(state==='play'?SPEED:state==='ready'?40:0); runT+=dt;
+    if(p.squash!==0){p.squash*=.85; if(Math.abs(p.squash)<.01)p.squash=0;}
+    for(var i=pops.length-1;i>=0;i--){pops[i].t+=dt; if(pops[i].t>.6)pops.splice(i,1);}
+    if(state!=='play')return;
+
+    // Spawn stumps with carrots on top and a carrot in the gap
+    spawnT-=dt;
+    if(spawnT<=0){
+      var h=24+Math.floor(Math.random()*41), w=40+Math.floor(Math.random()*20), x0=LW+30;
+      blocks.push({x:x0,w:w,h:h});
+      carrots.push({x:x0+w/2,y:GROUND-h-16});
+      carrots.push({x:x0+w+100,y:GROUND-45});
+      spawnT=1.7+Math.random()*1.0;
+    }
+    blocks.forEach(function(b){b.x-=SPEED*dt;});
+    carrots.forEach(function(c){c.x-=SPEED*dt;});
+    blocks=blocks.filter(function(b){return b.x+b.w>-20;});
+    carrots=carrots.filter(function(c){return c.x>-20;});
+
+    // Jump physics: holding slows gravity, up to MAX_HOLD seconds
+    var g=G;
+    if(!p.ground&&held&&p.vy<0&&holdT<MAX_HOLD){g=G_HOLD; holdT+=dt;}
+    var prevB=p.y+p.h;
+    p.vy+=g*dt; p.y+=p.vy*dt;
+    var floor=GROUND, bot=p.y+p.h;
+    if(p.vy>=0){
+      blocks.forEach(function(b){
+        var top=GROUND-b.h;
+        if(p.x+p.w-6>b.x&&p.x+6<b.x+b.w&&prevB<=top+2&&top<floor)floor=top;
+      });
+    }
+    p.ground=false;
+    if(p.vy>=0&&bot>=floor){
+      if(p.vy>250)p.squash=.3;
+      p.y=floor-p.h; p.vy=0; p.ground=true;
+      if(held){p.vy=V0; p.ground=false; holdT=0; p.squash=-.25;}
+    }
+
+    // Collect carrots
+    carrots=carrots.filter(function(c){
+      var hit=p.x+p.w-4>c.x-8&&p.x+4<c.x+8&&p.y+p.h>c.y-12&&p.y<c.y+12;
+      if(hit){count++; pops.push({x:c.x,y:c.y,t:0});}
+      return !hit;
+    });
+    if(count>=GOAL){count=GOAL; state='won';}
+  }
+
+  function text(s,x,y,size,color,align){
+    ctx.fillStyle=color; ctx.font=size+'px Georgia,serif'; ctx.textAlign=align||'center'; ctx.fillText(s,x,y);
+  }
+  function pine(x,base,h,col){
+    ctx.fillStyle=col;
+    for(var k=0;k<3;k++){
+      var w=h*(.34-k*.07), y0=base-h*.18-k*h*.26;
+      ctx.beginPath(); ctx.moveTo(x-w,y0); ctx.lineTo(x,y0-h*.42); ctx.lineTo(x+w,y0); ctx.fill();
+    }
+  }
+  function forest(spacing,factor,base,h,col){
+    var off=-((scroll*factor)%spacing);
+    for(var x=off-spacing;x<LW+spacing;x+=spacing){
+      var idx=Math.round((x+scroll*factor)/spacing);
+      var v=.8+.35*(((idx*37)%10+10)%10)/10;
+      pine(x,base,h*v,col);
+    }
+  }
+  function drawCarrot(x,y){
+    y+=Math.sin(runT*4+x*.05)*2;
+    ctx.fillStyle='#4fae4f';
+    ctx.beginPath(); ctx.ellipse(x-3,y-13,2.5,6,-.4,0,7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(x+3,y-13,2.5,6,.4,0,7); ctx.fill();
+    ctx.fillStyle='#f08a24';
+    ctx.beginPath(); ctx.moveTo(x-6,y-9); ctx.lineTo(x+6,y-9); ctx.lineTo(x,y+11); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle='rgba(0,0,0,.2)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(x-3,y-4); ctx.lineTo(x+1,y-4); ctx.moveTo(x-2,y+1); ctx.lineTo(x+2,y+1); ctx.stroke();
+  }
+
+  function draw(){
+    ctx.setTransform(canvas.width/LW,0,0,canvas.height/LH,0,0);
+    ctx.fillStyle=css('--sky'); ctx.fillRect(0,0,LW,LH);
+    forest(60,.15,GROUND-40,120,css('--far'));
+    forest(95,.4,GROUND,160,css('--mid'));
+    ctx.fillStyle=css('--ground'); ctx.fillRect(0,GROUND,LW,14);
+    ctx.fillStyle=css('--dirt'); ctx.fillRect(0,GROUND+14,LW,LH-GROUND-14);
+    ctx.fillStyle='rgba(0,0,0,.18)';
+    for(var x=-(scroll%40);x<LW;x+=40)ctx.fillRect(x,GROUND+30,16,4);
+
+    // Stumps
+    blocks.forEach(function(b){
+      var top=GROUND-b.h;
+      ctx.fillStyle='#7d5230'; ctx.fillRect(b.x,top,b.w,b.h);
+      ctx.fillStyle='rgba(0,0,0,.18)';
+      for(var s=b.x+10;s<b.x+b.w-4;s+=12)ctx.fillRect(s,top+8,2,b.h-8);
+      ctx.fillStyle='#c18e56'; ctx.fillRect(b.x-2,top,b.w+4,7);
+      ctx.fillStyle='#a8763f'; ctx.fillRect(b.x+b.w/2-8,top+2,16,2);
+    });
+
+    carrots.forEach(function(c){drawCarrot(c.x,c.y);});
+
+    // Bunny: hops while running, ears and legs react to the jump
+    var air=!p.ground, cyc=Math.sin(runT*9);
+    var bob=(state==='play'&&p.ground)?-Math.abs(cyc)*6:0;
+    var sx=1-p.squash*.5, sy=1+p.squash;
+    var ear=-0.3+Math.max(-1,Math.min(1,p.vy/900))*.35+(air?0:cyc*.08);
+    var leg=air?(p.vy<0?5:-2):cyc*5;
+    var fur='#f6f1f7', edge='#8a7f99', pink='#f3a6c4';
+    function blob(x,y,rx,ry,col,rot){ctx.beginPath();ctx.ellipse(x,y,rx,ry,rot||0,0,7);ctx.fillStyle=col;ctx.fill();}
+    ctx.save(); ctx.translate(p.x+p.w/2,p.y+p.h+bob); ctx.scale(sx,sy);
+    ctx.lineWidth=1.5; ctx.strokeStyle=edge;
+    [[5,ear-.15],[11,ear]].forEach(function(e){
+      ctx.save(); ctx.translate(e[0],-29); ctx.rotate(e[1]);
+      ctx.beginPath(); ctx.ellipse(0,-12,4.2,13,0,0,7); ctx.fillStyle=fur; ctx.fill(); ctx.stroke();
+      blob(0,-11,2,9,pink); ctx.restore();
+    });
+    blob(-9+leg*-.6,-3,8,3.5,fur); blob(-17,-13,5.5,5.5,'#fff');
+    ctx.beginPath(); ctx.ellipse(-2,-13,15,11,0,0,7); ctx.fillStyle=fur; ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(12,-22,10,0,7); ctx.fill(); ctx.stroke();
+    blob(8-leg*.6,-2,5,3,fur);
+    blob(15,-24,2.2,2.2,'#22202e'); blob(21,-21,1.8,1.5,pink);
+    ctx.restore();
+
+    pops.forEach(function(q){
+      ctx.globalAlpha=1-q.t/.6; text('+1',q.x,q.y-14-q.t*40,16,'#fff'); ctx.globalAlpha=1;
+    });
+
+    // HUD
+    ctx.fillStyle='rgba(0,0,0,.25)'; ctx.fillRect(10,10,92,30);
+    drawCarrot(26,26);
+    text(count+' / '+GOAL,42,31,17,'#fff','left');
+    text('Level '+level,LW-12,31,15,css('--ink'),'right');
+
+    if(state==='ready'){
+      ctx.fillStyle='rgba(0,0,0,.3)'; ctx.fillRect(40,170,LW-80,80);
+      text('Press and hold to jump',LW/2,203,21,'#fff');
+      text('Collect 30 carrots',LW/2,230,15,'#fff');
+    }
+    if(state==='won'){
+      ctx.fillStyle='rgba(0,0,0,.4)'; ctx.fillRect(0,0,LW,LH);
+      text('Level complete!',LW/2,200,32,'#fff');
+      text('30 carrots collected',LW/2,232,16,'#fff');
+      text('Press to start again',LW/2,264,16,'#fff');
+    }
+  }
+
+  function frame(now){
+    var dt=Math.min((now-last)/1000,.04); last=now;
+    update(dt); draw(); requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(function(n){last=n; frame(n);});
+})();
+</script>
+</body>
+</html>
