@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #14241c;
+    --moss: #1f3a2c;
+    --leaf: #7fb069;
+    --cream: #f3efe0;
+    --carrot: #ff8a1f;
+    --carrot-deep: #c95f00;
+    --display: "Bagel Fat One", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+    --body: "Nunito", "Trebuchet MS", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --night: #e9f0dc;
+      --moss: #d3e3c0;
+      --leaf: #3f7a2c;
+      --cream: #1c2f23;
+      --carrot: #e8730a;
+      --carrot-deep: #a84c00;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--night);
+    color: var(--cream);
+    font-family: var(--body);
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    display: grid;
+    place-items: center;
+    padding: max(1.5rem, env(safe-area-inset-top)) 1.5rem max(1.5rem, env(safe-area-inset-bottom));
+    background-image:
+      radial-gradient(ellipse at 50% 120%, var(--moss) 0%, transparent 65%);
+  }
+
+  main { width: 100%; max-width: 30rem; }
+
+  .screen[hidden] { display: none; }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(2.75rem, 12vw, 4.5rem);
+    line-height: 1;
+    margin: 0 0 2rem;
+    letter-spacing: 0.01em;
+  }
+
+  .menu { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 1.1rem 1.5rem;
+    border-radius: 1.25rem;
+    border: 3px solid var(--carrot);
+    background: var(--carrot);
+    color: #1a1208;
+    font-family: var(--display);
+    font-size: 1.6rem;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 6px 0 var(--carrot-deep);
+    transition: transform .1s ease, box-shadow .1s ease;
+  }
+  .btn:hover { transform: translateY(2px); box-shadow: 0 4px 0 var(--carrot-deep); }
+  .btn:active { transform: translateY(6px); box-shadow: 0 0 0 var(--carrot-deep); }
+  .btn:focus-visible, .back:focus-visible {
+    outline: 3px solid var(--cream);
+    outline-offset: 4px;
+  }
+
+  .back {
+    display: inline-block;
+    margin-top: 2rem;
+    color: var(--leaf);
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    background: none;
+    border: 0;
+    padding: .25rem 0;
+    font-family: var(--body);
+    font-size: 1.05rem;
+    cursor: pointer;
+  }
+
+  .note { margin: 0 0 1.75rem; opacity: .85; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <!-- Menu 1: Games -->
+  <section class="screen" id="games" aria-labelledby="games-title">
+    <h1 id="games-title">Games</h1>
+    <ul class="menu">
+      <li><a class="btn" href="#collect-carrots">Collect Carrots</a></li>
+    </ul>
+  </section>
+
+  <!-- Menu 2: Collect Carrots -->
+  <section class="screen" id="collect-carrots" aria-labelledby="carrot-title" hidden>
+    <h1 id="carrot-title">Carrot Collector</h1>
+    <p class="note">Help the bunny gather carrots in the forest.</p>
+    <ul class="menu">
+      <li><a class="btn" href="https://thebookkpr.github.io/games/carrot-collector/bunny-in-forest.html">Play Carrot Collector</a></li>
+    </ul>
+    <a class="back" href="#games">Back to Games</a>
+  </section>
+
+</main>
+
+<script>
+  // Shows one menu at a time. The URL hash keeps the browser Back button working.
+  (function () {
+    var screens = document.querySelectorAll('.screen');
+    function show() {
+      var id = location.hash.slice(1);
+      var found = false;
+      screens.forEach(function (s) {
+        var match = s.id === id;
+        s.hidden = !match;
+        if (match) found = true;
+      });
+      if (!found) document.getElementById('games').hidden = false;
+      var heading = document.querySelector('.screen:not([hidden]) h1');
+      if (heading) {
+        document.title = heading.textContent;
+      }
+    }
+    window.addEventListener('hashchange', show);
+    show();
+  })();
+</script>
+</body>
+  </html>
+  
