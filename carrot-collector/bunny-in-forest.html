@@ -66,11 +66,10 @@ canvas{width:100%; height:100%; display:block; touch-action:none}
   }
   reset();
 
-  // ---- Generated audio: soft chimes, warm pad, gentle wind. No audio files. ----
+  // ---- Generated audio: playful chiptune loop and sound effects. No audio files. ----
   var AC=null,master,musicBus,sfxBus,soundOn=true,musicRun=false,nextNote=0,step=0;
-  var PAD=[[48,55,64],[45,52,60],[41,48,57],[43,50,59]];
-  var MEL=[76,0,79,0,76,0,74,0, 72,0,76,0,81,0,79,0, 76,0,74,0,72,0,74,0, 79,0,76,0,74,0,0,0];
-  var SC=[72,74,76,79,81];
+  var CHORDS=[[60,64,67],[57,60,64],[53,57,60],[55,59,62]], ROOTS=[48,45,41,43];
+  var ARP=[0,1,2,1,2,1,0,1], ARP2=[0,2,1,2,0,2,1,2];
   function hz(m){return 440*Math.pow(2,(m-69)/12);}
   function tone(f,t,d,type,vol,att,bus){
     var o=AC.createOscillator(), g=AC.createGain();
@@ -80,24 +79,14 @@ canvas{width:100%; height:100%; display:block; touch-action:none}
   }
   function bell(m,t,vol,bus){var f=hz(m); tone(f,t,1.6,'sine',vol,.01,bus); tone(f*2.76,t,.45,'sine',vol*.2,.005,bus);}
   function playStep(s,t){
-    var bar=Math.floor(s/8), k=s%8;
-    if(k===0)PAD[bar].forEach(function(m){tone(hz(m),t,4.2,'sine',.035,.9,musicBus);});
-    if(MEL[s])bell(MEL[s],t,.05,musicBus);
-    else if(Math.random()<.18)bell(SC[Math.floor(Math.random()*5)]+12,t,.018,musicBus);
+    var bar=Math.floor(s/8)%4, k=s%8, ch=CHORDS[bar], a=(bar%2)?ARP2:ARP;
+    tone(hz(ch[a[k]]+12),t,.2,'square',.035,.005,musicBus);
+    if(k===0||k===4)tone(hz(ROOTS[bar]),t,.4,'triangle',.12,.005,musicBus);
+    else if(k===6)tone(hz(ROOTS[bar]+7),t,.2,'triangle',.07,.005,musicBus);
   }
   function sched(){
     if(!AC||!musicRun)return;
-    while(nextNote<AC.currentTime+.4){playStep(step%32,nextNote); nextNote+=.5; step++;}
-  }
-  function wind(){
-    var n=AC.sampleRate*2, b=AC.createBuffer(1,n,AC.sampleRate), d=b.getChannelData(0);
-    for(var i=0;i<n;i++)d[i]=Math.random()*2-1;
-    var s=AC.createBufferSource(); s.buffer=b; s.loop=true;
-    var f=AC.createBiquadFilter(); f.type='bandpass'; f.frequency.value=450; f.Q.value=.5;
-    var g=AC.createGain(); g.gain.value=.025;
-    var l=AC.createOscillator(), lg=AC.createGain(); l.frequency.value=.12; lg.gain.value=.018;
-    l.connect(lg); lg.connect(g.gain);
-    s.connect(f); f.connect(g); g.connect(musicBus); s.start(); l.start();
+    while(nextNote<AC.currentTime+.4){playStep(step%32,nextNote); nextNote+=.22; step++;}
   }
   function audioStart(){
     try{
@@ -106,7 +95,7 @@ canvas{width:100%; height:100%; display:block; touch-action:none}
         master=AC.createGain(); master.gain.value=soundOn?1:0; master.connect(AC.destination);
         musicBus=AC.createGain(); musicBus.connect(master);
         sfxBus=AC.createGain(); sfxBus.connect(master);
-        wind(); setInterval(sched,100);
+        setInterval(sched,100);
       }
       if(AC.state==='suspended')AC.resume();
     }catch(e){}
@@ -125,13 +114,13 @@ canvas{width:100%; height:100%; display:block; touch-action:none}
     var t=AC.currentTime;
     if(k==='jump'){
       var o=AC.createOscillator(), g=AC.createGain();
-      o.type='sine'; o.frequency.setValueAtTime(300,t); o.frequency.exponentialRampToValueAtTime(520,t+.14);
+      o.type='square'; o.frequency.setValueAtTime(330,t); o.frequency.exponentialRampToValueAtTime(660,t+.12);
       g.gain.setValueAtTime(.05,t); g.gain.exponentialRampToValueAtTime(.001,t+.16);
       o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t+.2);
-    }else if(k==='dew'){bell(SC[v%5]+12*(Math.floor(v/5)%2),t,.07);}
-    else if(k==='seed'){bell(84,t,.07); bell(91,t+.1,.06);}
+    }else if(k==='dew'){tone(988,t,.08,'square',.05,.005); tone(1319,t+.07,.14,'square',.05,.005);}
+    else if(k==='seed'){tone(1319,t,.08,'square',.05,.005); tone(1568,t+.07,.08,'square',.05,.005); tone(2093,t+.14,.18,'square',.05,.005);}
     else if(k==='splash'){tone(700,t,.12,'sine',.03);}
-    else if(k==='win'){[72,76,79,84].forEach(function(m,i){bell(m,t+.3+i*.22,.07);});}
+    else if(k==='win'){[523,659,784,1047].forEach(function(f,i){tone(f,t+.1+i*.12,.25,'square',.06,.005);});}
   }
   var muteBtn=document.getElementById('mute');
   muteBtn.addEventListener('click',function(){
