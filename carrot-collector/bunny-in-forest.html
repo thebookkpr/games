@@ -40,9 +40,19 @@ p{margin:0; color:var(--muted); font-size:.95rem; text-align:center; line-height
   border:1px solid var(--line); touch-action:none; cursor:pointer;
 }
 canvas{width:100%; height:100%; display:block; touch-action:none}
+.bar{width:100%; max-width:380px; display:flex; justify-content:space-between; align-items:center}
+.bar a,.bar button{
+  font:inherit; font-size:.9rem; color:var(--ink); background:transparent; text-decoration:none;
+  border:1px solid var(--line); border-radius:999px; padding:6px 14px; cursor:pointer;
+}
+.bar a:hover,.bar button:hover{background:var(--line)}
 </style>
 </head>
 <body>
+<div class="bar">
+  <a href="https://thebookkpr.github.io/games/index.html" target="_top" rel="noopener">← Home</a>
+  <button id="mute" type="button" aria-label="Toggle sound">♪ On</button>
+</div>
 <h1>Bunny in the Forest</h1>
 <p>Press and hold to jump. Hold longer to jump higher. Land on stumps and collect 30 carrots.</p>
 <div class="stage"><canvas id="c" aria-label="Bunny platformer game"></canvas></div>
@@ -68,11 +78,62 @@ canvas{width:100%; height:100%; display:block; touch-action:none}
   }
   reset();
 
+  // ---- Generated audio (no files): looping chiptune + small sound effects ----
+  var AC=null, master=null, soundOn=true, nextNote=0, step=0;
+  var CHORDS=[[60,64,67],[57,60,64],[53,57,60],[55,59,62]], ROOTS=[48,45,41,43], ARP=[0,1,2,1,2,1,0,1];
+  function hz(m){return 440*Math.pow(2,(m-69)/12);}
+  function tone(f,t,d,type,vol){
+    var o=AC.createOscillator(), g=AC.createGain();
+    o.type=type; o.frequency.value=f;
+    g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.001,t+d);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t+d+.02);
+  }
+  function playStep(s,t){
+    var bar=Math.floor(s/8)%4, k=s%8, ch=CHORDS[bar];
+    tone(hz(ch[ARP[k]]+12),t,.2,'square',.035);
+    if(k===0||k===4)tone(hz(ROOTS[bar]),t,.4,'triangle',.12);
+  }
+  function sched(){
+    if(!AC)return;
+    while(nextNote<AC.currentTime+.3){playStep(step%32,nextNote); nextNote+=.25; step++;}
+  }
+  function audioStart(){
+    try{
+      if(!AC){
+        AC=new (window.AudioContext||window.webkitAudioContext)();
+        master=AC.createGain(); master.gain.value=soundOn?1:0; master.connect(AC.destination);
+        nextNote=AC.currentTime+.05; setInterval(sched,100);
+      }
+      if(AC.state==='suspended')AC.resume();
+    }catch(e){}
+  }
+  function sfx(k){
+    if(!AC)return;
+    var t=AC.currentTime;
+    if(k==='jump'){
+      var o=AC.createOscillator(), g=AC.createGain();
+      o.type='square'; o.frequency.setValueAtTime(330,t); o.frequency.exponentialRampToValueAtTime(660,t+.12);
+      g.gain.setValueAtTime(.05,t); g.gain.exponentialRampToValueAtTime(.001,t+.14);
+      o.connect(g); g.connect(master); o.start(t); o.stop(t+.16);
+    }else if(k==='coin'){
+      tone(988,t,.08,'square',.05); tone(1319,t+.07,.14,'square',.05);
+    }else if(k==='win'){
+      [523,659,784,1047].forEach(function(f,i){tone(f,t+i*.12,.25,'square',.06);});
+    }
+  }
+  var muteBtn=document.getElementById('mute');
+  muteBtn.addEventListener('click',function(){
+    soundOn=!soundOn;
+    muteBtn.textContent=soundOn?'♪ On':'♪ Off';
+    if(master)master.gain.setTargetAtTime(soundOn?1:0,AC.currentTime,.05);
+  });
+
   function press(){
+    audioStart();
     if(state==='won'){level++; reset(); state='play'; return;}
     if(state==='ready'){state='play';}
     held=true;
-    if(p.ground){p.vy=V0; p.ground=false; holdT=0; p.squash=-.25;}
+    if(p.ground){p.vy=V0; p.ground=false; holdT=0; p.squash=-.25; sfx('jump');}
   }
   function release(){held=false;}
 
@@ -118,16 +179,16 @@ canvas{width:100%; height:100%; display:block; touch-action:none}
     if(p.vy>=0&&bot>=floor){
       if(p.vy>250)p.squash=.3;
       p.y=floor-p.h; p.vy=0; p.ground=true;
-      if(held){p.vy=V0; p.ground=false; holdT=0; p.squash=-.25;}
+      if(held){p.vy=V0; p.ground=false; holdT=0; p.squash=-.25; sfx('jump');}
     }
 
     // Collect carrots
     carrots=carrots.filter(function(c){
       var hit=p.x+p.w-4>c.x-8&&p.x+4<c.x+8&&p.y+p.h>c.y-12&&p.y<c.y+12;
-      if(hit){count++; pops.push({x:c.x,y:c.y,t:0});}
+      if(hit){count++; pops.push({x:c.x,y:c.y,t:0}); sfx('coin');}
       return !hit;
     });
-    if(count>=GOAL){count=GOAL; state='won';}
+    if(count>=GOAL){count=GOAL; state='won'; sfx('win');}
   }
 
   function text(s,x,y,size,color,align){
