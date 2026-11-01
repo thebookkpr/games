@@ -1,0 +1,140 @@
+/* One More Little Step — scene.css V1.0 */
+
+/* Scene background art is set per scene from JS or inline style */
+.scene .bg {
+  transition: filter var(--fade-slow) var(--ease-gentle);
+}
+
+/* Scene name card: fades in briefly when a scene opens */
+.scene-name {
+  position: absolute;
+  top: 4%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-ui);
+  padding: 0.4em 1.4em;
+  font-size: clamp(0.8rem, 2vw, 1.3rem);
+  letter-spacing: 0.2em;
+  color: var(--ivory);
+  text-shadow: 0 0 12px var(--silver-glow);
+  opacity: 0;
+  pointer-events: none;
+}
+.scene.active .scene-name {
+  animation: name-fade 4s var(--ease-gentle) 0.6s both;
+}
+@keyframes name-fade {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  75%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Lunelle sprite: placed by percentage so it matches the art */
+.lunelle {
+  position: absolute;
+  z-index: var(--z-lunelle);
+  left: 10%;
+  bottom: 4%;
+  width: 28%;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 10px rgba(27, 24, 48, 0.35));
+}
+
+/* Hotspots: invisible hit areas, positioned inline with
+   left, top, width, height in percent */
+.hotspot {
+  position: absolute;
+  z-index: var(--z-hotspot);
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: box-shadow var(--fade-slow) var(--ease-gentle),
+              background var(--fade-slow) var(--ease-gentle);
+}
+
+/* Gentle hint on hover or focus, never a puzzle marker */
+.hotspot:hover,
+.hotspot:focus-visible {
+  background: radial-gradient(circle,
+    rgba(230, 235, 242, 0.28) 0%,
+    rgba(230, 235, 242, 0) 70%);
+  box-shadow: 0 0 22px var(--silver-glow);
+}
+
+/* After discovery: stays softly lit, no longer needs a hint */
+.hotspot.found {
+  cursor: default;
+  background: radial-gradient(circle,
+    rgba(205, 191, 232, 0.2) 0%,
+    rgba(205, 191, 232, 0) 70%);
+  box-shadow: none;
+  pointer-events: none;
+}
+
+/* Soft ripple where the player clicked */
+.hotspot-ripple {
+  position: absolute;
+  z-index: var(--z-fx);
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border-radius: 50%;
+  border: 2px solid var(--silver);
+  opacity: 0;
+  pointer-events: none;
+  animation: ripple 1.2s var(--ease-gentle) forwards;
+}
+@keyframes ripple {
+  0%   { opacity: 0.8; transform: scale(0.4); }
+  100% { opacity: 0;   transform: scale(2.4); }
+}
+
+/* Hidden Silver Lotus Petal: very faint until found */
+.petal {
+  position: absolute;
+  z-index: var(--z-hotspot);
+  width: 4%;
+  min-width: 36px;
+  aspect-ratio: 1;
+  background: url("../images/silver-petal.png") center / contain no-repeat;
+  border: 0;
+  opacity: 0.35;
+  cursor: pointer;
+  transition: opacity var(--fade-slow) var(--ease-gentle),
+              transform var(--fade-slow) var(--ease-gentle);
+}
+.petal:hover,
+.petal:focus-visible {
+  opacity: 0.7;
+}
+
+/* Collected: floats up and fades away */
+.petal.collected {
+  opacity: 0;
+  transform: translateY(-30px) scale(1.2);
+  pointer-events: none;
+}
+
+/* Gentle response text for any hotspot, shown near the bottom */
+.whisper {
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  z-index: var(--z-ui);
+  max-width: 70%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-style: italic;
+  color: var(--ivory);
+  text-shadow: 0 2px 8px rgba(27, 24, 48, 0.7);
+  opacity: 0;
+  transition: opacity var(--fade-slow) var(--ease-gentle);
+  pointer-events: none;
+}
+.whisper.show { opacity: 1; }
