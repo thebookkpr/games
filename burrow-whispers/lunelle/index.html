@@ -1,29 +1,23 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1, viewport-fit=cover">
-
-  <meta name="theme-color" content="#11152e">
-
-  <title>One More Little Step</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#17172f">
+  <title>One More Little Step — Burrow Whispers</title>
 
   <style>
-    /* =========================================
-       ONE MORE LITTLE STEP
-       Milestone 1: Responsive Title Menu
-       ========================================= */
-
     :root {
-      --ivory: #fff8f0;
-      --lavender: #d9c8f5;
-      --violet: #a99be4;
-      --mist: #c9e0f5;
-      --night: #11152e;
-      --deep-blue: #20284b;
-      --font: Georgia, "Times New Roman", serif;
+      --ivory: #fff9ee;
+      --lavender: #dcd1f5;
+      --violet: #a997dc;
+      --soft-violet: #7665ad;
+      --mist: #b9c7e8;
+      --night: #17172f;
+      --deep-blue: #252747;
+      --glass: rgba(255, 255, 255, 0.09);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --text-soft: #d9d7ee;
     }
 
     * {
@@ -40,618 +34,554 @@
       min-height: 100vh;
       min-height: 100dvh;
       color: var(--ivory);
-      font-family: var(--font);
-      overflow-x: hidden;
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(ellipse at 50% 15%, #45416d 0%, transparent 48%),
+        linear-gradient(180deg, #252747 0%, #17172f 72%, #101326 100%);
     }
 
     button {
       font: inherit;
-      -webkit-tap-highlight-color: transparent;
     }
 
     button:focus-visible {
-      outline: 3px solid var(--mist);
-      outline-offset: 5px;
+      outline: 3px solid var(--ivory);
+      outline-offset: 4px;
     }
 
-    /* Main game container */
-
-    .game {
+    .game-shell {
       position: relative;
-      display: grid;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       min-height: 100vh;
       min-height: 100dvh;
+      padding:
+        max(24px, env(safe-area-inset-top))
+        max(20px, env(safe-area-inset-right))
+        max(24px, env(safe-area-inset-bottom))
+        max(20px, env(safe-area-inset-left));
       overflow: hidden;
       isolation: isolate;
-      background:
-        radial-gradient(
-          ellipse at 50% 32%,
-          #49517b 0%,
-          #252d51 32%,
-          #151a36 70%,
-          #0c1024 100%
-        );
     }
 
-    /* Atmospheric moonlight */
+    /* Background atmosphere */
 
     .moon {
       position: absolute;
       z-index: -2;
-      top: 9%;
+      top: 8%;
       left: 50%;
-      width: clamp(100px, 25vw, 190px);
+      width: clamp(90px, 22vw, 150px);
       aspect-ratio: 1;
       transform: translateX(-50%);
       border-radius: 50%;
-
-      background:
-        radial-gradient(
-          circle at 35% 30%,
-          #ffffff,
-          #e9e5ff 42%,
-          #bcb8e8 75%,
-          #9c9bcf
-        );
-
-      box-shadow:
-        0 0 35px #d7d4ff55,
-        0 0 100px #a7b6ff33,
-        0 0 180px #b3b9ff22;
+      background: radial-gradient(circle at 35% 35%, #fffef5, #e8e1fa 55%, #bcb1df);
+      box-shadow: 0 0 45px rgba(220, 209, 245, 0.28);
+      opacity: 0.9;
     }
 
-    .moon::after {
-      content: "";
+    .pond-glow {
       position: absolute;
-      inset: -25%;
-      border-radius: 50%;
-      background: #d8dcff;
-      opacity: 0.08;
-      filter: blur(20px);
+      z-index: -2;
+      left: -20%;
+      right: -20%;
+      bottom: -18%;
+      height: 42%;
+      border-radius: 50% 50% 0 0;
+      background: radial-gradient(ellipse, rgba(132, 146, 197, 0.22), transparent 68%);
     }
-
-    /* Stars */
 
     .stars {
       position: absolute;
-      z-index: -2;
+      z-index: -1;
       inset: 0;
       pointer-events: none;
-
       background-image:
-        radial-gradient(1px 1px at 10% 20%, #fff 90%, transparent),
-        radial-gradient(2px 2px at 23% 35%, #e5e1ff 90%, transparent),
-        radial-gradient(1px 1px at 80% 18%, #fff 90%, transparent),
-        radial-gradient(2px 2px at 72% 45%, #d8e4ff 90%, transparent),
-        radial-gradient(1px 1px at 42% 12%, #fff 90%, transparent),
-        radial-gradient(1px 1px at 91% 36%, #fff 90%, transparent),
-        radial-gradient(2px 2px at 14% 55%, #e5e1ff 90%, transparent);
+        radial-gradient(2px 2px at 12% 22%, #fff 45%, transparent 60%),
+        radial-gradient(2px 2px at 82% 17%, #eee5ff 45%, transparent 60%),
+        radial-gradient(1px 1px at 27% 48%, #fff 45%, transparent 60%),
+        radial-gradient(2px 2px at 72% 55%, #fff 45%, transparent 60%),
+        radial-gradient(1px 1px at 91% 72%, #eee5ff 45%, transparent 60%),
+        radial-gradient(1px 1px at 8% 78%, #fff 45%, transparent 60%);
+      opacity: 0.7;
     }
 
-    /* Pond silhouette */
+    /* Main menu area */
 
-    .pond {
-      position: absolute;
-      z-index: -1;
-      left: -15%;
-      bottom: -9%;
-      width: 130%;
-      height: 39%;
-      border-radius: 50% 50% 0 0;
-
-      background:
-        radial-gradient(
-          ellipse at 50% 0%,
-          #9ea7d955,
-          transparent 55%
-        ),
-        linear-gradient(
-          180deg,
-          #424c77 0%,
-          #293456 30%,
-          #18233e 100%
-        );
-
-      box-shadow:
-        0 -15px 50px #c6d2ff12;
-    }
-
-    .pond::before {
-      content: "";
-      position: absolute;
-      inset: 8% 10% 0;
-      border-radius: 50% 50% 0 0;
-
-      background:
-        repeating-linear-gradient(
-          175deg,
-          transparent 0 18px,
-          #d6dcff12 19px 20px,
-          transparent 21px 40px
-        );
-
-      animation: waterShimmer 9s ease-in-out infinite alternate;
-    }
-
-    .pond::after {
-      content: "";
-      position: absolute;
-      top: 8%;
-      left: 50%;
-      width: 30%;
-      height: 20%;
-      transform: translateX(-50%);
-      border-radius: 50%;
-
-      background: #e3e3ff;
-      opacity: 0.1;
-      filter: blur(25px);
-    }
-
-    /* Fireflies */
-
-    .fireflies {
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .firefly {
-      position: absolute;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #e9e6ff;
-
-      box-shadow:
-        0 0 8px 3px #d9d3ff66,
-        0 0 18px 5px #c8d7ff22;
-
-      animation: drift 7s ease-in-out infinite alternate;
-    }
-
-    .firefly:nth-child(1) {
-      left: 12%;
-      top: 57%;
-      animation-delay: -2s;
-    }
-
-    .firefly:nth-child(2) {
-      left: 82%;
-      top: 62%;
-      animation-delay: -5s;
-    }
-
-    .firefly:nth-child(3) {
-      left: 27%;
-      top: 76%;
-      animation-delay: -3s;
-    }
-
-    .firefly:nth-child(4) {
-      left: 70%;
-      top: 51%;
-      animation-delay: -1s;
-    }
-
-    .firefly:nth-child(5) {
-      left: 91%;
-      top: 78%;
-      animation-delay: -4s;
-    }
-
-    /* Screen layout */
-
-    .screen {
-      display: none;
-      position: relative;
-      width: 100%;
-      min-height: 100vh;
-      min-height: 100dvh;
-
-      padding:
-        max(28px, env(safe-area-inset-top))
-        max(20px, env(safe-area-inset-right))
-        max(28px, env(safe-area-inset-bottom))
-        max(20px, env(safe-area-inset-left));
-
-      place-items: center;
+    .menu-panel {
+      width: min(100%, 440px);
+      margin: auto;
+      padding: 30px 24px;
       text-align: center;
+      animation: appear 500ms ease both;
     }
 
-    .screen.active {
-      display: grid;
-    }
-
-    .menu-content {
-      width: min(100%, 600px);
-      margin-top: -2vh;
-    }
-
-    .eyebrow {
-      margin-bottom: 18px;
+    .story-label {
+      margin: 0 0 12px;
       color: var(--lavender);
-      font-size: 0.8rem;
-      letter-spacing: 0.28em;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
     }
 
-    .title {
+    h1 {
       margin: 0;
       color: var(--ivory);
-      font-size: clamp(2.4rem, 8vw, 5.2rem);
+      font-size: clamp(2.2rem, 9vw, 3.6rem);
       font-weight: normal;
-      line-height: 1.05;
-      letter-spacing: -0.035em;
-
-      text-shadow:
-        0 0 25px #d9c8f533,
-        0 3px 18px #0b102b88;
+      line-height: 1.08;
+      text-shadow: 0 3px 24px rgba(220, 209, 245, 0.24);
     }
 
-    .title span {
-      display: block;
-      margin-top: 8px;
-      color: var(--lavender);
-      font-size: 0.72em;
-      font-style: italic;
+    h2 {
+      margin: 0 0 14px;
+      color: var(--ivory);
+      font-size: clamp(1.8rem, 7vw, 2.5rem);
+      font-weight: normal;
     }
 
     .subtitle {
-      margin: 28px 0 36px;
-      color: #e3e4f5;
-      font-size: clamp(1rem, 3vw, 1.25rem);
-      font-style: italic;
-      line-height: 1.7;
+      margin: 16px auto 28px;
+      max-width: 310px;
+      color: var(--text-soft);
+      font-size: 1rem;
+      line-height: 1.65;
     }
 
-    /* Buttons */
+    .menu-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: min(100%, 290px);
+      margin: 0 auto;
+    }
 
     .menu-button {
-      display: block;
-      width: min(100%, 280px);
-      min-height: 54px;
-      margin: 12px auto;
-      padding: 14px 24px;
-
+      min-height: 52px;
+      padding: 13px 20px;
+      border: 1px solid var(--glass-border);
+      border-radius: 30px;
       color: var(--ivory);
-      background: #e3d9f40d;
-      border: 1px solid #d9c8f577;
-      border-radius: 999px;
-
+      background: var(--glass);
       cursor: pointer;
-      touch-action: manipulation;
-
       transition:
         background 180ms ease,
         border-color 180ms ease,
-        transform 180ms ease,
-        box-shadow 180ms ease;
+        transform 180ms ease;
     }
 
     .menu-button.primary {
-      color: #24213e;
-      background: linear-gradient(
-        135deg,
-        #f5edff,
-        #cbbce9
-      );
-
-      border-color: #fff8ff;
-      box-shadow: 0 0 25px #c7b8ff22;
+      color: #282341;
+      border-color: transparent;
+      background: linear-gradient(120deg, #f5eafa, #cfc1f0);
+      box-shadow: 0 5px 22px rgba(12, 10, 35, 0.2);
     }
 
-    @media (hover: hover) {
-      .menu-button:hover {
-        background: #d9c8f522;
-        border-color: var(--ivory);
-        transform: translateY(-2px);
-      }
+    .menu-button:hover {
+      border-color: rgba(255, 255, 255, 0.55);
+      background-color: rgba(255, 255, 255, 0.16);
+    }
 
-      .menu-button.primary:hover {
-        background: #fff7ff;
-        box-shadow: 0 0 30px #d6c6ff55;
-      }
+    .menu-button.primary:hover {
+      background: linear-gradient(120deg, #fff9ee, #e0d4f7);
     }
 
     .menu-button:active {
       transform: scale(0.98);
     }
 
-    .footer-note {
-      margin-top: 34px;
-      color: #c5c9e0;
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
+    .small-note {
+      margin: 26px 0 0;
+      color: #b9b6d2;
+      font-size: 0.82rem;
+      line-height: 1.5;
     }
 
-    /* Placeholder scene */
+    /* Secondary screens */
 
-    .scene-content {
-      width: min(100%, 650px);
+    .screen {
+      display: none;
+      width: 100%;
     }
 
-    .scene-title {
-      margin: 0 0 20px;
-      font-size: clamp(2rem, 7vw, 3.5rem);
-      font-weight: normal;
+    .screen.active {
+      display: block;
+    }
+
+    .screen-copy {
+      margin: 0 auto 26px;
+      max-width: 340px;
+      color: var(--text-soft);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      width: min(100%, 340px);
+      margin: 12px auto;
+      padding: 16px;
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      background: var(--glass);
+      text-align: left;
+    }
+
+    .setting-description {
+      color: var(--text-soft);
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+
+    .toggle {
+      flex: 0 0 auto;
+      min-width: 76px;
+      min-height: 38px;
+      padding: 7px 12px;
+      border: 1px solid var(--glass-border);
+      border-radius: 22px;
       color: var(--ivory);
+      background: rgba(255, 255, 255, 0.1);
+      cursor: pointer;
     }
 
-    .scene-description {
-      max-width: 460px;
-      margin: 0 auto 35px;
-      color: #e1e3f4;
-      font-size: 1.1rem;
-      line-height: 1.8;
+    .toggle[aria-pressed="true"] {
+      color: #282341;
+      border-color: transparent;
+      background: var(--lavender);
     }
 
-    .scene-note {
-      margin-bottom: 32px;
-      color: var(--lavender);
-      font-size: 0.85rem;
+    .back-button {
+      margin-top: 22px;
+    }
+
+    .footer-mark {
+      position: absolute;
+      bottom: max(14px, env(safe-area-inset-bottom));
+      left: 0;
+      right: 0;
+      color: rgba(230, 225, 249, 0.48);
+      font-size: 0.72rem;
       letter-spacing: 0.12em;
-      text-transform: uppercase;
+      text-align: center;
+      pointer-events: none;
     }
 
-    /* Animations */
-
-    @keyframes drift {
+    @keyframes appear {
       from {
-        transform: translate(0, 0);
-        opacity: 0.35;
+        opacity: 0;
+        transform: translateY(10px);
       }
-
       to {
-        transform: translate(12px, -20px);
         opacity: 1;
+        transform: translateY(0);
       }
     }
 
-    @keyframes waterShimmer {
-      from {
-        opacity: 0.4;
-        transform: translateX(-1%);
-      }
+    /* Reduced motion setting */
 
-      to {
-        opacity: 0.8;
-        transform: translateX(1%);
-      }
+    body.reduce-motion *,
+    body.reduce-motion *::before,
+    body.reduce-motion *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
 
-    /* Reduced motion accessibility */
+    /* Wider screens */
 
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
-    }
-
-    /* Compact landscape phones */
-
-    @media (max-height: 500px) and (orientation: landscape) {
-      .moon {
-        top: 4%;
-        width: 90px;
-      }
-
-      .menu-content {
-        margin-top: 0;
-      }
-
-      .eyebrow {
-        margin-bottom: 8px;
-      }
-
-      .title {
-        font-size: clamp(2rem, 7vh, 3rem);
+    @media (min-width: 700px) {
+      .menu-panel {
+        padding: 42px 36px;
       }
 
       .subtitle {
-        margin: 12px 0 16px;
+        font-size: 1.08rem;
+      }
+    }
+
+    /* Short landscape screens */
+
+    @media (orientation: landscape) and (max-height: 560px) {
+      .game-shell {
+        justify-content: flex-start;
+        overflow-y: auto;
+      }
+
+      .menu-panel {
+        padding: 12px 20px 30px;
+      }
+
+      .moon {
+        top: 2%;
+        width: 85px;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      .subtitle {
+        margin: 8px auto 14px;
+      }
+
+      .menu-buttons {
+        gap: 8px;
       }
 
       .menu-button {
         min-height: 44px;
-        margin: 8px auto;
-        padding: 10px 20px;
+        padding: 9px 16px;
       }
 
-      .footer-note {
-        margin-top: 12px;
+      .footer-mark {
+        display: none;
+      }
+    }
+
+    @media (hover: none) {
+      .menu-button:hover {
+        background-color: var(--glass);
+      }
+
+      .menu-button.primary:hover {
+        background: linear-gradient(120deg, #f5eafa, #cfc1f0);
       }
     }
   </style>
 </head>
 
 <body>
-
-  <main class="game">
-
+  <main class="game-shell">
     <div class="moon" aria-hidden="true"></div>
+    <div class="pond-glow" aria-hidden="true"></div>
     <div class="stars" aria-hidden="true"></div>
-    <div class="pond" aria-hidden="true"></div>
 
-    <div class="fireflies" aria-hidden="true">
-      <span class="firefly"></span>
-      <span class="firefly"></span>
-      <span class="firefly"></span>
-      <span class="firefly"></span>
-      <span class="firefly"></span>
-    </div>
+    <div class="menu-panel">
 
-    <!-- TITLE MENU -->
-
-    <section
-      id="title-screen"
-      class="screen active"
-      aria-label="Title menu">
-
-      <div class="menu-content">
-
-        <div class="eyebrow">
-          A Burrow Whispers Story
-        </div>
-
-        <h1 class="title">
-          One More
-          <span>Little Step</span>
-        </h1>
+      <!-- TITLE MENU -->
+      <section class="screen active" id="title-screen">
+        <p class="story-label">A Burrow Whispers Story</p>
+        <h1>One More<br>Little Step</h1>
 
         <p class="subtitle">
-          Sometimes courage simply takes<br>
-          one more little step.
+          Sometimes courage simply means taking one more little step.
         </p>
 
-        <button
-          id="begin-button"
-          class="menu-button primary">
-          Begin Journey
-        </button>
+        <nav class="menu-buttons" aria-label="Main menu">
+          <button class="menu-button primary" data-screen="journey-screen">
+            Begin Journey
+          </button>
 
-        <button
-          id="about-button"
-          class="menu-button">
-          About the Story
-        </button>
+          <button class="menu-button" data-screen="settings-screen">
+            Settings
+          </button>
 
-        <div class="footer-note">
-          A quiet journey beneath the moon
-        </div>
+          <button class="menu-button" data-screen="about-screen">
+            About the Story
+          </button>
+        </nav>
 
-      </div>
-    </section>
+        <p class="small-note">
+          A quiet journey through the Moonroot Wilds.
+        </p>
+      </section>
 
-    <!-- FIRST SCENE PLACEHOLDER -->
+      <!-- SETTINGS MENU -->
+      <section class="screen" id="settings-screen">
+        <p class="story-label">Your Experience</p>
+        <h2>Settings</h2>
 
-    <section
-      id="pond-screen"
-      class="screen"
-      aria-label="Moonroot Pond">
-
-      <div class="scene-content">
-
-        <div class="scene-note">
-          Scene One
-        </div>
-
-        <h2 class="scene-title">
-          Moonroot Pond
-        </h2>
-
-        <p class="scene-description">
-          The familiar pond rests beneath the moon.
-          Silver reflections shimmer quietly across
-          the water.
-
-          <br><br>
-
-          Somewhere among them, something unusual
-          waits to be noticed.
+        <p class="screen-copy">
+          Make a few adjustments to create a comfortable journey.
         </p>
 
-        <button
-          id="return-button"
-          class="menu-button">
+        <div class="setting-row">
+          <div>
+            <strong>Sound</strong>
+            <div class="setting-description">
+              Environmental sounds and gentle music
+            </div>
+          </div>
+          <button
+            class="toggle"
+            id="sound-toggle"
+            type="button"
+            aria-pressed="true">
+            On
+          </button>
+        </div>
+
+        <div class="setting-row">
+          <div>
+            <strong>Reduced Motion</strong>
+            <div class="setting-description">
+              Minimize movement and animation
+            </div>
+          </div>
+          <button
+            class="toggle"
+            id="motion-toggle"
+            type="button"
+            aria-pressed="false">
+            Off
+          </button>
+        </div>
+
+        <button class="menu-button back-button" data-screen="title-screen">
           Return to Title
         </button>
+      </section>
 
-      </div>
-    </section>
+      <!-- ABOUT MENU -->
+      <section class="screen" id="about-screen">
+        <p class="story-label">A Little About This World</p>
+        <h2>About the Story</h2>
 
-    <!-- ABOUT SCREEN -->
-
-    <section
-      id="about-screen"
-      class="screen"
-      aria-label="About the story">
-
-      <div class="scene-content">
-
-        <div class="scene-note">
-          Burrow Whispers
-        </div>
-
-        <h2 class="scene-title">
-          A Little Courage
-        </h2>
-
-        <p class="scene-description">
-          Follow Lunelle through a peaceful moonlit
-          world filled with quiet discoveries.
-
-          <br><br>
-
-          There is no rush, no danger, and no wrong
-          way to be curious.
-
-          <br><br>
-
-          Sometimes courage simply takes one
-          more little step.
+        <p class="screen-copy">
+          Lunelle is a gentle, curious rabbit who discovers a mysterious
+          silver light beside Moonroot Pond.
         </p>
 
-        <button
-          id="about-return-button"
-          class="menu-button">
+        <p class="screen-copy">
+          What follows is a peaceful journey through the Moonroot Wilds,
+          where little discoveries lead to quiet acts of courage.
+        </p>
+
+        <p class="screen-copy">
+          There is no rush, no failure, and no wrong way to explore.
+        </p>
+
+        <button class="menu-button back-button" data-screen="title-screen">
           Return to Title
         </button>
+      </section>
 
-      </div>
-    </section>
+      <!-- JOURNEY PLACEHOLDER -->
+      <section class="screen" id="journey-screen">
+        <p class="story-label">Moonroot Wilds</p>
+        <h2>The Journey Awaits</h2>
 
+        <p class="screen-copy">
+          This is where Lunelle's adventure will begin.
+          The exploration area will be added in a later development step.
+        </p>
+
+        <button class="menu-button" data-screen="title-screen">
+          Return to Title
+        </button>
+      </section>
+
+      <!-- PAUSE MENU -->
+      <section class="screen" id="pause-screen">
+        <p class="story-label">Take Your Time</p>
+        <h2>Journey Paused</h2>
+
+        <p class="screen-copy">
+          The world can wait. Take a quiet moment before continuing.
+        </p>
+
+        <nav class="menu-buttons" aria-label="Pause menu">
+          <button class="menu-button primary" data-screen="journey-screen">
+            Resume Journey
+          </button>
+
+          <button class="menu-button" data-screen="settings-screen">
+            Settings
+          </button>
+
+          <button class="menu-button" data-screen="title-screen">
+            Return to Title
+          </button>
+        </nav>
+      </section>
+
+    </div>
+
+    <div class="footer-mark">BURROW WHISPERS</div>
   </main>
 
   <script>
-    /* =========================================
-       MENU NAVIGATION
-       ========================================= */
+    // ----------------------------------------
+    // SCREEN NAVIGATION
+    // ----------------------------------------
 
-    const screens = {
-      title: document.getElementById("title-screen"),
-      pond: document.getElementById("pond-screen"),
-      about: document.getElementById("about-screen")
-    };
+    const screens = document.querySelectorAll(".screen");
 
-    function showScreen(screenName) {
-      Object.values(screens).forEach(screen => {
+    function showScreen(screenId) {
+      screens.forEach((screen) => {
         screen.classList.remove("active");
       });
 
-      screens[screenName].classList.add("active");
+      const nextScreen = document.getElementById(screenId);
+
+      if (nextScreen) {
+        nextScreen.classList.add("active");
+      }
     }
 
-    document
-      .getElementById("begin-button")
-      .addEventListener("click", () => {
-        showScreen("pond");
+    document.querySelectorAll("[data-screen]").forEach((button) => {
+      button.addEventListener("click", () => {
+        showScreen(button.dataset.screen);
       });
+    });
 
-    document
-      .getElementById("about-button")
-      .addEventListener("click", () => {
-        showScreen("about");
-      });
+    // ----------------------------------------
+    // SOUND SETTING
+    // ----------------------------------------
 
-    document
-      .getElementById("return-button")
-      .addEventListener("click", () => {
-        showScreen("title");
-      });
+    const soundToggle = document.getElementById("sound-toggle");
+    let soundEnabled = true;
 
-    document
-      .getElementById("about-return-button")
-      .addEventListener("click", () => {
-        showScreen("title");
-      });
+    soundToggle.addEventListener("click", () => {
+      soundEnabled = !soundEnabled;
+
+      soundToggle.setAttribute("aria-pressed", soundEnabled);
+      soundToggle.textContent = soundEnabled ? "On" : "Off";
+    });
+
+    // Sound controls are prepared for future audio.
+    // No sound files are required at this stage.
+
+    // ----------------------------------------
+    // REDUCED MOTION SETTING
+    // ----------------------------------------
+
+    const motionToggle = document.getElementById("motion-toggle");
+    let reducedMotion = false;
+
+    motionToggle.addEventListener("click", () => {
+      reducedMotion = !reducedMotion;
+
+      motionToggle.setAttribute("aria-pressed", reducedMotion);
+      motionToggle.textContent = reducedMotion ? "On" : "Off";
+
+      document.body.classList.toggle("reduce-motion", reducedMotion);
+    });
+
+    // ----------------------------------------
+    // PAUSE MENU PREPARATION
+    // ----------------------------------------
+
+    // The pause screen is built and ready.
+    // Later, the gameplay interface will open it
+    // when the player presses the pause button.
+
+    // ----------------------------------------
+    // FUTURE DEVELOPMENT NOTES
+    // ----------------------------------------
+
+    // 1. Connect Begin Journey to the first scene.
+    // 2. Add a pause button to the exploration interface.
+    // 3. Connect sound setting to actual audio.
+    // 4. Save player settings between visits.
+    // 5. Add Lunelle and approved artwork when available.
   </script>
-
 </body>
 </html>
