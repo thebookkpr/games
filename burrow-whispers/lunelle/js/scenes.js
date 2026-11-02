@@ -1,5 +1,6 @@
-/* One More Little Step — scenes.js V1.0
+/* One More Little Step — scenes.js V1.1
    Scene data only. No behavior lives here.
+   V1.1: Scene 1 gets tutorial hint text (interface guidance, not story dialogue).
    Hotspot and petal positions are percentages of the stage
    (x, y = left, top; w, h = width, height).
    Positions below are placeholders: adjust them to match the real art.
@@ -13,6 +14,8 @@ const SCENES = [
     background: "images/scene-pond.jpg",
     lunelle: { src: "images/lunelle-pond.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
+    hint: "Tap what catches your eye",
+    hint2: "Each discovery fills your Courage",
     hotspots: [
       { id: "reflection", kind: "wonder", courage: 1,
         x: 48, y: 35, w: 12, h: 14, whisper: "" },
