@@ -1,4 +1,5 @@
-/* One More Little Step — audio.js V1.0
+/* One More Little Step — audio.js V1.1
+   V1.1: crickets made much softer, lower and rarer (the old ones sounded like beeps)
    Part 1 of 1 (JavaScript Part 5)
    Gentle night sounds made live with the Web Audio API (no sound files):
    wind, water, crickets and soft chimes, mixed differently per scene,
@@ -14,12 +15,12 @@ const Sound = (() => {
 
   /* Layer levels per scene (0 to 1). "title" is the menu. */
   const MIX = {
-    title:          { wind: 0.2,  water: 0.3, crickets: 0.3,  chimes: 0.35 },
-    pond:           { wind: 0.25, water: 0.6, crickets: 0.5,  chimes: 0.5 },
-    "silver-light": { wind: 0.45, water: 0,   crickets: 0.6,  chimes: 0.5 },
-    clearing:       { wind: 0.3,  water: 0,   crickets: 0.7,  chimes: 0.6 },
-    moth:           { wind: 0.3,  water: 0,   crickets: 0.45, chimes: 0.7 },
-    hilltop:        { wind: 0.7,  water: 0,   crickets: 0.4,  chimes: 0.5 }
+    title:          { wind: 0.2,  water: 0.3, crickets: 0.15, chimes: 0.35 },
+    pond:           { wind: 0.25, water: 0.6, crickets: 0.25, chimes: 0.5 },
+    "silver-light": { wind: 0.45, water: 0,   crickets: 0.3,  chimes: 0.5 },
+    clearing:       { wind: 0.3,  water: 0,   crickets: 0.35, chimes: 0.6 },
+    moth:           { wind: 0.3,  water: 0,   crickets: 0.25, chimes: 0.7 },
+    hilltop:        { wind: 0.7,  water: 0,   crickets: 0.2,  chimes: 0.5 }
   };
 
   let on = true;
@@ -80,7 +81,7 @@ const Sound = (() => {
     lfo(0.3, 0.15, wag.gain);
 
     /* little living sounds, each on its own relaxed timer */
-    [4200, 4650, 3900].forEach((f, i) => setTimeout(() => cricketLoop(f), i * 700));
+    [2700, 3000].forEach((f, i) => setTimeout(() => cricketLoop(f), i * 1800));
     plinkLoop();
     chimeLoop();
     return true;
@@ -106,15 +107,15 @@ const Sound = (() => {
       o.frequency.value = f * rand(0.98, 1.02);
       g.gain.value = 0;
       o.connect(g); g.connect(layers.crickets);
-      for (let k = 0; k < 3; k++) {
-        const t = t0 + k * 0.075;
+      for (let k = 0; k < 4; k++) {                 /* soft, rounded pulses */
+        const t = t0 + k * 0.1;
         g.gain.setValueAtTime(0, t);
-        g.gain.linearRampToValueAtTime(0.07, t + 0.012);
-        g.gain.linearRampToValueAtTime(0, t + 0.05);
+        g.gain.linearRampToValueAtTime(0.025, t + 0.03);
+        g.gain.linearRampToValueAtTime(0, t + 0.09);
       }
-      o.start(t0); o.stop(t0 + 0.4);
+      o.start(t0); o.stop(t0 + 0.5);
     }
-    setTimeout(() => cricketLoop(f), rand(900, 2400));
+    setTimeout(() => cricketLoop(f), rand(3000, 7000));
   }
 
   function plinkLoop() {
@@ -215,4 +216,4 @@ const Sound = (() => {
 
   return { scene, discover, petal, ready, toggle, isOn: () => on, unlock };
 })();
-    
+               
