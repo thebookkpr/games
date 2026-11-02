@@ -1,4 +1,6 @@
-/* One More Little Step — game.js V1.6
+/* One More Little Step — game.js V1.7
+   V1.7: blinking arrow and text pointing to the hidden petal (scenes with petalHint)
+   V1.6
    V1.6: sound hooks (audio.js) and a Sound on/off button in Settings
    V1.5
    V1.5: save support: remembers found hotspots, resume() for Continue, newGame() resets cleanly
@@ -30,6 +32,15 @@ const Game = (() => {
   stage.appendChild(fade);
 
   /* ---------- Build ---------- */
+  /* Blinking text and arrow that point at the hidden petal (scenes with petalHint) */
+  function petalHintHTML(s) {
+    if (!s.petalHint) return "";
+    const cx = s.petal.x + 2;                              /* petal is 4% wide */
+    const tx = Math.min(Math.max(cx, 15), 85);             /* keep the text on screen */
+    return `<div class="petal-hint-text" style="left:${tx}%;top:${s.petal.y - 18}%">${s.petalHint}</div>
+            <div class="petal-hint-arrow" style="left:${cx}%;top:${s.petal.y - 10}%">&#9660;</div>`;
+  }
+
   function buildScene(s, i) {
     const slots = SCENES.map(() => '<span class="petal-slot"></span>').join("");
     const L = s.lunelle;
@@ -51,6 +62,7 @@ const Game = (() => {
        <div class="crest" style="left:${L.x + L.w * 0.4}%;bottom:${L.bottom + 30 * (L.w / 28)}%"></div>
        <p class="whisper"></p>
        <p class="hint"></p>
+       ${petalHintHTML(s)}
        <button class="next-btn">${i === TOTAL - 1 ? "One more little step" : "Next"}</button>`;
 
     s.hotspots.forEach(h => {
@@ -164,6 +176,29 @@ const Game = (() => {
     showHint(scene().hint2, 4500);
   }
 
+  /* ---------- Petal hint (after the meter is full and the petal is still hidden) ---------- */
+  let petalHintTimer;
+
+  function hidePetalHint() {
+    clearTimeout(petalHintTimer);
+    sceneEls.forEach((e, n) => {
+      e.querySelectorAll(".petal-hint-text, .petal-hint-arrow").forEach(x => x.classList.remove("show"));
+      petalEls[n].classList.remove("hinted");
+    });
+  }
+
+  function checkPetalHint() {
+    clearTimeout(petalHintTimer);
+    if (current < 0) return;
+    const s = scene();
+    if (!s.petalHint || petalsGot[current] || courage < s.courageRequired) return;
+    petalHintTimer = setTimeout(() => {
+      if (current < 0 || petalsGot[current]) return;
+      el().querySelectorAll(".petal-hint-text, .petal-hint-arrow").forEach(x => x.classList.add("show"));
+      petalEls[current].classList.add("hinted");
+    }, 4000);                                  /* let the Next button and chime land first */
+  }
+
   /* ---------- Idle reminder (every scene with hotspots) ---------- */
   let idleTimer;
 
@@ -201,7 +236,7 @@ const Game = (() => {
     courage += h.courage;
     updateMeter();
     au("discover", h.kind);
-    if (courage === s.courageRequired) au("ready");
+    if (courage === s.courageRequired) { au("ready"); checkPetalHint(); }
     whisper(h.whisper);
     endTutorial();
     shimmer();
@@ -214,6 +249,7 @@ const Game = (() => {
     petalsGot[i] = true;
     btn.classList.add("collected");
     au("petal");
+    hidePetalHint();
     updatePetals();
     shimmer();
     resetIdle();
@@ -243,6 +279,7 @@ const Game = (() => {
     swap(() => {
       titleEl.classList.remove("active");
       sceneEls.forEach(s => s.classList.remove("active"));
+      hidePetalHint();
       current = i;
       if (!keep) { courage = 0; foundIds[i] = []; }
       applyFound(i);
@@ -254,12 +291,14 @@ const Game = (() => {
       startTutorial();
       startVanishTimer();
       resetIdle();
+      checkPetalHint();
       sv();
     });
   }
 
   function goTitle() {
     swap(() => {
+      hidePetalHint();
       stopTutorialTimers();
       clearTimeout(vanishTimer);
       clearTimeout(idleTimer);
