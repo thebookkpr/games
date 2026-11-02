@@ -160,3 +160,14 @@
 .scene .hotspot {
   outline: 2px dashed rgba(255, 255, 255, 0.6);
 }
+
+.scene .hotspot,
+.scene .petal,
+.next-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fade-overlay {
+  pointer-events: none;
+}
