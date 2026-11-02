@@ -1,4 +1,4 @@
-/* One More Little Step — scenes.js V1.3
+/* One More Little Step — scenes.js V1.4
    Scene data only. No behavior lives here.
    V1.1: Scene 1 tutorial hint text (interface guidance, not story dialogue).
    V1.2: Scene 1 hotspots and petal placed on the real pond art.
@@ -7,14 +7,18 @@
    (x, y = left, top; w, h = width, height).
    Scenes 2 to 5 positions are still placeholders until their art is placed.
    Whisper text is deliberately empty: dialogue is written after
-   the visual assets exist (project decision). */
+   the visual assets exist (project decision).
+   V1.4: Lunelle's sprites moved to images/sprites/, the Scene 1 sprite is
+   now half size near the shore and fades out after 5 seconds (with the crest
+   shimmer scaling to the sprite and skipping once she's gone), and unfound
+   hotspots glow again after 15 seconds without a discovery. */
 
 const SCENES = [
   {
     id: "pond",
     title: "Moonroot Pond",
     background: "images/scene-pond.jpg",
-    lunelle: { src: "images/sprites/lunelle-pond.png", x: 10, bottom: 4, w: 28 },
+     lunelle: { src: "images/sprites/lunelle-pond.png", x: 4, bottom: 4, w: 14, vanishAfter: 5000 },
     courageRequired: 5,
     hint: "Tap what catches your eye",
     hint2: "Each discovery fills your Courage",
