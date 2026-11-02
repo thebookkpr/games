@@ -1,4 +1,5 @@
-/* One More Little Step — scenes.js V1.10
+/* One More Little Step — scenes.js V1.11
+   V1.11: Scene 1 second left-lotus hotspot moved to the larger lotus nearer the middle.
    V1.10: Scene 5 (Farther From the Burrow) hotspots and petal placed. Petals moved: Scene 2 to the top of the left rock, Scene 3 onto the left mushroom. Scene 1 gets a sixth hotspot on the second left lotus (courage still needs 5).
    V1.9: Scene 3 petal moved beside the left tree (it vanished near the bright glow); Scene 4 (The Moth) hotspots and petal placed.
    V1.8: Scene 2 petal moved to the left rock; Scene 3 (The Clearing) hotspots and petal placed.
@@ -44,10 +45,10 @@ const SCENES = [
         x: 57, y: 76, w: 8, h: 18, whisper: "" },
       /* the glowing Moon Lotus on the far left of the pond */
       { id: "lotus-left", kind: "wonder", courage: 1,
-        x: 15.5, y: 53, w: 6, h: 11, whisper: "" },
-      /* the larger lotus beside it, nearer the shore */
-      { id: "lotus-shore", kind: "watch", courage: 1,
-        x: 21.8, y: 57.5, w: 5.5, h: 10, whisper: "" }
+        x: 15.7, y: 51.5, w: 9, h: 14, whisper: "" },
+      /* the larger lotus nearer the middle of the pond */
+      { id: "lotus-mid", kind: "watch", courage: 1,
+        x: 34.5, y: 56, w: 7, h: 11, whisper: "" }
     ],
     petal: { x: 77, y: 79 }
   },
