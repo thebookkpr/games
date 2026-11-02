@@ -102,3 +102,18 @@
   box-shadow: none;
   transform: none;
 }
+
+/* Build version: small, bottom-left corner of the title screen */
+.version {
+  position: absolute;
+  left: 2%;
+  bottom: 3%;
+  z-index: 2;
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--lavender);
+  opacity: 0.6;
+  pointer-events: none;
+}
