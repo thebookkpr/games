@@ -1,4 +1,6 @@
-/* One More Little Step — game.js V1.5
+/* One More Little Step — game.js V1.6
+   V1.6: sound hooks (audio.js) and a Sound on/off button in Settings
+   V1.5
    V1.5: save support: remembers found hotspots, resume() for Continue, newGame() resets cleanly
    V1.1: gentle first-time tutorial (Scene 1 only)
    V1.2: missing Lunelle sprite files are hidden instead of showing a broken image
@@ -20,6 +22,7 @@ const Game = (() => {
   /* Optional modules (effects.js, save.js) may not exist yet */
   const fx = (fn, ...a) => { if (typeof Effects !== "undefined") Effects[fn](...a); };
   const sv = () => { if (typeof Save !== "undefined") Save.save(); };
+  const au = (fn, ...a) => { if (typeof Sound !== "undefined") Sound[fn](...a); };
 
   /* Fade overlay, created once */
   const fade = document.createElement("div");
@@ -197,6 +200,8 @@ const Game = (() => {
     setTimeout(() => rip.remove(), 1300);
     courage += h.courage;
     updateMeter();
+    au("discover", h.kind);
+    if (courage === s.courageRequired) au("ready");
     whisper(h.whisper);
     endTutorial();
     shimmer();
@@ -208,6 +213,7 @@ const Game = (() => {
     if (petalsGot[i]) return;
     petalsGot[i] = true;
     btn.classList.add("collected");
+    au("petal");
     updatePetals();
     shimmer();
     resetIdle();
@@ -244,6 +250,7 @@ const Game = (() => {
       updateMeter();
       updatePetals();
       fx("start", el());
+      au("scene", scene().id);
       startTutorial();
       startVanishTimer();
       resetIdle();
@@ -259,6 +266,7 @@ const Game = (() => {
       sceneEls.forEach(s => s.classList.remove("active"));
       current = -1;
       titleEl.classList.add("active");
+      au("scene", "title");
     });
   }
 
@@ -272,7 +280,16 @@ const Game = (() => {
     stage.appendChild(p);
     return p;
   }
-  const settingsPanel = panel("Settings", "Sound and display options are coming soon.");
+  const settingsPanel = panel("Settings", "Gentle night sounds can be turned on or off here.");
+  if (typeof Sound !== "undefined") {
+    const card = settingsPanel.querySelector(".panel-card");
+    const sb = document.createElement("button");
+    sb.className = "menu-btn";
+    const label = () => { sb.textContent = "Sound: " + (Sound.isOn() ? "On" : "Off"); };
+    label();
+    sb.addEventListener("click", () => { Sound.toggle(); label(); });
+    card.insertBefore(sb, card.querySelector("button"));
+  }
   const creditsPanel = panel("Credits", "One More Little Step<br>A Burrow Whispers Story");
 
   /* ---------- Menu wiring ---------- */
