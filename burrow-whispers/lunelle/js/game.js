@@ -1,4 +1,5 @@
-/* One More Little Step — game.js V1.4
+/* One More Little Step — game.js V1.5
+   V1.5: save support: remembers found hotspots, resume() for Continue, newGame() resets cleanly
    V1.1: gentle first-time tutorial (Scene 1 only)
    V1.2: missing Lunelle sprite files are hidden instead of showing a broken image
    V1.3: crest offset scales with sprite size; optional vanishAfter fades Lunelle out
@@ -12,6 +13,8 @@ const Game = (() => {
   let courage = 0;
   let found = 0;
   let petalsGot = new Array(TOTAL).fill(false);
+  let foundIds = SCENES.map(() => []);   /* hotspot ids found, per scene */
+  const petalEls = [];
   let moving = false;
 
   /* Optional modules (effects.js, save.js) may not exist yet */
@@ -61,6 +64,7 @@ const Game = (() => {
     p.setAttribute("aria-label", "Silver petal");
     p.style.cssText = `left:${s.petal.x}%;top:${s.petal.y}%`;
     p.addEventListener("click", () => onPetal(i, p));
+    petalEls[i] = p;
     el.appendChild(p);
 
     el.querySelector(".next-btn").addEventListener("click", () => {
@@ -183,6 +187,7 @@ const Game = (() => {
   function onHotspot(s, h, btn, e) {
     if (btn.classList.contains("found")) return;
     btn.classList.add("found");
+    foundIds[current].push(h.id);
     const r = stage.getBoundingClientRect();
     const rip = document.createElement("div");
     rip.className = "hotspot-ripple";
@@ -209,6 +214,13 @@ const Game = (() => {
     sv();
   }
 
+  /* Show saved/found state on a scene's hotspots and petal */
+  function applyFound(i) {
+    sceneEls[i].querySelectorAll(".hotspot").forEach(b =>
+      b.classList.toggle("found", foundIds[i].includes(b.getAttribute("aria-label"))));
+    petalEls[i].classList.toggle("collected", petalsGot[i]);
+  }
+
   /* ---------- Navigation ---------- */
   function swap(fn) {
     if (moving) return;
@@ -221,12 +233,13 @@ const Game = (() => {
     }, 1200);
   }
 
-  function goTo(i) {
+  function goTo(i, keep) {
     swap(() => {
       titleEl.classList.remove("active");
       sceneEls.forEach(s => s.classList.remove("active"));
       current = i;
-      courage = 0;
+      if (!keep) { courage = 0; foundIds[i] = []; }
+      applyFound(i);
       el().classList.add("active");
       updateMeter();
       updatePetals();
@@ -263,14 +276,36 @@ const Game = (() => {
   const creditsPanel = panel("Credits", "One More Little Step<br>A Burrow Whispers Story");
 
   /* ---------- Menu wiring ---------- */
-  document.getElementById("btn-start").addEventListener("click", () => goTo(0));
+  function newGame() {
+    petalsGot = new Array(TOTAL).fill(false);
+    foundIds = SCENES.map(() => []);
+    courage = 0;
+    sceneEls.forEach((_, n) => applyFound(n));
+    goTo(0);
+  }
+
+  function resume(s) {
+    petalsGot = [...s.petalsGot];
+    foundIds = s.foundIds.map(a => [...a]);
+    courage = s.courage;
+    sceneEls.forEach((_, n) => applyFound(n));
+    tutorialDone = true;                       /* they have played before */
+    goTo(s.current, true);
+  }
+
+  document.getElementById("btn-start").addEventListener("click", () => {
+    if (typeof Save !== "undefined" && Save.has() &&
+        !confirm("Begin a new journey? Your saved progress will be replaced.")) return;
+    newGame();
+  });
   document.getElementById("btn-settings").addEventListener("click", () => settingsPanel.classList.add("show"));
   document.getElementById("btn-credits").addEventListener("click", () => creditsPanel.classList.add("show"));
 
   /* Public hooks for save.js and effects.js (later Parts) */
   return {
-    goTo,
-    getState: () => ({ current, courage, petalsGot: [...petalsGot] }),
-    setState: s => { courage = s.courage; petalsGot = s.petalsGot; }
+    goTo, newGame, resume,
+    getState: () => ({ current, courage, petalsGot: [...petalsGot],
+                       foundIds: foundIds.map(a => [...a]) }),
+    setState: s => { courage = s.courage; petalsGot = s.petalsGot; foundIds = s.foundIds; }
   };
 })();
