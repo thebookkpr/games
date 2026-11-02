@@ -1,4 +1,5 @@
-/* One More Little Step — effects.js V1.0
+/* One More Little Step — effects.js V1.1
+   V1.1: Scene 2 recipe (silver orb pulse).
    Part 1 of 1 (JavaScript Part 3)
    Fills each scene's .fx-layer with fireflies, particles, fog,
    water sparkle, the silver reflection and Moon Lotus glow.
@@ -20,6 +21,11 @@ const Effects = (() => {
       reflection: { x: 45, y: 53, w: 11, h: 24 },
       /* Moon Lotus bloom glow, matched to the lotus hotspot */
       lotus: [{ x: 61.5, y: 59, w: 9, h: 18 }]
+    },
+    "silver-light": {
+      fireflies: 8, particles: 10, sparkles: 0, fog: true,
+      /* pulse on the silver orb */
+      reflection: { x: 58.5, y: 33, w: 10, h: 18 }
     },
     default: { fireflies: 8, particles: 8, sparkles: 0, fog: true }
   };
@@ -110,4 +116,3 @@ const Effects = (() => {
 
   return { start, stop };
 })();
-          
