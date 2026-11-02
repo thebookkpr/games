@@ -1,4 +1,5 @@
-/* One More Little Step — effects.js V1.3
+/* One More Little Step — effects.js V1.4
+   V1.4: Scene 5 recipe (lake glow, twinkling light trail).
    V1.3: Scene 4 recipe (soft glow around the moth).
    V1.2: Scene 3 recipe (glow pulse in the clearing).
    V1.1: Scene 2 recipe (silver orb pulse).
@@ -36,6 +37,13 @@ const Effects = (() => {
     moth: {
       fireflies: 10, particles: 10, sparkles: 0, fog: true,
       reflection: { x: 56.5, y: 22, w: 13, h: 22 }
+    },
+    hilltop: {
+      fireflies: 12, particles: 10, sparkles: 8, fog: true,
+      /* twinkle along the silver trail */
+      water: { x: 12, y: 38, w: 10, h: 15 },
+      /* glow on the distant lake */
+      reflection: { x: 55.5, y: 36, w: 11, h: 15 }
     },
     default: { fireflies: 8, particles: 8, sparkles: 0, fog: true }
   };
