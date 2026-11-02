@@ -1,7 +1,8 @@
-/* One More Little Step — scenes.js V1.2
+/* One More Little Step — scenes.js V1.3
    Scene data only. No behavior lives here.
    V1.1: Scene 1 tutorial hint text (interface guidance, not story dialogue).
    V1.2: Scene 1 hotspots and petal placed on the real pond art.
+   V1.3: Lunelle sprites moved to images/sprites/.
    Hotspot and petal positions are percentages of the stage
    (x, y = left, top; w, h = width, height).
    Scenes 2 to 5 positions are still placeholders until their art is placed.
@@ -13,7 +14,7 @@ const SCENES = [
     id: "pond",
     title: "Moonroot Pond",
     background: "images/scene-pond.jpg",
-    lunelle: { src: "images/lunelle-pond.png", x: 10, bottom: 4, w: 28 },
+    lunelle: { src: "images/sprites/lunelle-pond.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
     hint: "Tap what catches your eye",
     hint2: "Each discovery fills your Courage",
@@ -40,7 +41,7 @@ const SCENES = [
     id: "silver-light",
     title: "The Silver Light",
     background: "images/scene-silver-light.jpg",
-    lunelle: { src: "images/lunelle-light.png", x: 10, bottom: 4, w: 28 },
+    lunelle: { src: "images/sprites/lunelle-light.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
     hotspots: [],   /* fill in when the art is placed */
     petal: { x: 70, y: 60 }
@@ -49,7 +50,7 @@ const SCENES = [
     id: "clearing",
     title: "The Clearing",
     background: "images/scene-clearing.jpg",
-    lunelle: { src: "images/lunelle-clearing.png", x: 10, bottom: 4, w: 28 },
+    lunelle: { src: "images/sprites/lunelle-clearing.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
     hotspots: [],
     petal: { x: 70, y: 60 }
@@ -58,7 +59,7 @@ const SCENES = [
     id: "moth",
     title: "The Moth",
     background: "images/scene-moth.jpg",
-    lunelle: { src: "images/lunelle-moth.png", x: 10, bottom: 4, w: 28 },
+    lunelle: { src: "images/sprites/lunelle-moth.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
     hotspots: [],
     petal: { x: 70, y: 60 }
@@ -67,7 +68,7 @@ const SCENES = [
     id: "hilltop",
     title: "Farther From the Burrow",
     background: "images/scene-hilltop.jpg",
-    lunelle: { src: "images/lunelle-hilltop.png", x: 10, bottom: 4, w: 28 },
+    lunelle: { src: "images/sprites/lunelle-hilltop.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
     hotspots: [],
     petal: { x: 70, y: 60 }
