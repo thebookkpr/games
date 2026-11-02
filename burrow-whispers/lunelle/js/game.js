@@ -1,5 +1,6 @@
-/* One More Little Step — game.js V1.1
-   V1.1: gentle first-time tutorial (Scene 1 only) */
+/* One More Little Step — game.js V1.2
+   V1.1: gentle first-time tutorial (Scene 1 only)
+   V1.2: missing Lunelle sprite files are hidden instead of showing a broken image */
 
 const Game = (() => {
   const stage = document.getElementById("game");
@@ -36,6 +37,7 @@ const Game = (() => {
          <div class="petals">${slots}</div>
        </div>
        <img class="lunelle" src="${L.src}" alt="Lunelle"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='none'"
             style="left:${L.x}%;bottom:${L.bottom}%;width:${L.w}%">
        <div class="crest" style="left:${L.x + L.w * 0.4}%;bottom:${L.bottom + 30}%"></div>
        <p class="whisper"></p>
@@ -226,4 +228,3 @@ const Game = (() => {
     setState: s => { courage = s.courage; petalsGot = s.petalsGot; }
   };
 })();
-      
