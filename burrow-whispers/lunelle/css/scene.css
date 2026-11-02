@@ -102,7 +102,7 @@
   width: 4%;
   min-width: 36px;
   aspect-ratio: 1;
-  background: url("../images/silver-petal.png") center / contain no-repeat;
+  background: url("../images/sprites/silver-petal.png") center / contain no-repeat;
   border: 0;
   opacity: 0.35;
   cursor: pointer;
