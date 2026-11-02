@@ -1,4 +1,5 @@
-/* One More Little Step — scenes.js V1.11
+/* One More Little Step — scenes.js V1.12
+   V1.12: petalHint text on Scenes 1 and 2 (blinking arrow to the hidden petal once courage is full).
    V1.11: Scene 1 second left-lotus hotspot moved to the larger lotus nearer the middle.
    V1.10: Scene 5 (Farther From the Burrow) hotspots and petal placed. Petals moved: Scene 2 to the top of the left rock, Scene 3 onto the left mushroom. Scene 1 gets a sixth hotspot on the second left lotus (courage still needs 5).
    V1.9: Scene 3 petal moved beside the left tree (it vanished near the bright glow); Scene 4 (The Moth) hotspots and petal placed.
@@ -28,6 +29,7 @@ const SCENES = [
     background: "images/scene-pond.jpg",
      lunelle: { src: "images/sprites/lunelle-pond.png", x: 4, bottom: 4, w: 14, vanishAfter: 5000 },
     courageRequired: 5,
+    petalHint: "Did you forget something?",
     hint: "Tap what catches your eye",
     hint2: "Each discovery fills your Courage",
     hotspots: [
@@ -58,6 +60,7 @@ const SCENES = [
     background: "images/scene-silver-light.jpg",
     lunelle: { src: "images/sprites/lunelle-light.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
+    petalHint: "A silver petal is hiding here",
     hotspots: [
       /* the glowing silver orb and its trail */
       { id: "orb",      kind: "wonder", courage: 1,
