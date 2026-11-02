@@ -1,6 +1,9 @@
-/* One More Little Step — scene.css V1.1 */
+/* One More Little Step — scene.css V1.2 */
 
-/* Scene background art is set per scene from JS or inline style */
+/* Scene background art is set per scene from JS or inline style
+   Sprite image location moved to background:
+   url("../images/sprites/silver-petal.png") center / contain no-repeat;*/
+
 .scene .bg {
   transition: filter var(--fade-slow) var(--ease-gentle);
 }
