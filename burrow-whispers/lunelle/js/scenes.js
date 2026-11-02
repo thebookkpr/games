@@ -1,4 +1,6 @@
-/* One More Little Step — scenes.js V1.4
+/* One More Little Step — scenes.js V1.5
+   V1.5: Scene 1 moon hotspot moved to the rocky hill (the moon was too
+   bright for the tutorial glow to show).
    Scene data only. No behavior lives here.
    V1.1: Scene 1 tutorial hint text (interface guidance, not story dialogue).
    V1.2: Scene 1 hotspots and petal placed on the real pond art.
@@ -35,9 +37,9 @@ const SCENES = [
       /* the grass tufts along the shoreline */
       { id: "reeds",      kind: "listen", courage: 1,
         x: 57, y: 76, w: 8, h: 18, whisper: "" },
-      /* the full moon */
-      { id: "moon",       kind: "wonder", courage: 1,
-        x: 45.8, y: 3, w: 9, h: 20, whisper: "" }
+      /* the rocky hill and tree, upper right (foreshadows Scene 5) */
+      { id: "hill",       kind: "wonder", courage: 1,
+        x: 61, y: 35, w: 12, h: 17, whisper: "" }
     ],
     petal: { x: 77, y: 79 }
   },
