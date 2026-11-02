@@ -1,4 +1,5 @@
-/* One More Little Step — effects.js V1.1
+/* One More Little Step — effects.js V1.2
+   V1.2: Scene 3 recipe (glow pulse in the clearing).
    V1.1: Scene 2 recipe (silver orb pulse).
    Part 1 of 1 (JavaScript Part 3)
    Fills each scene's .fx-layer with fireflies, particles, fog,
@@ -26,6 +27,10 @@ const Effects = (() => {
       fireflies: 8, particles: 10, sparkles: 0, fog: true,
       /* pulse on the silver orb */
       reflection: { x: 58.5, y: 33, w: 10, h: 18 }
+    },
+    clearing: {
+      fireflies: 10, particles: 10, sparkles: 0, fog: true,
+      reflection: { x: 57.5, y: 45, w: 10, h: 20 }
     },
     default: { fireflies: 8, particles: 8, sparkles: 0, fog: true }
   };
