@@ -138,3 +138,25 @@
   pointer-events: none;
 }
 .whisper.show { opacity: 1; }
+
+/* Tap-through safety: decorative layers never catch taps */
+.scene .bg,
+.scene .fx-layer,
+.scene .hud,
+.scene .crest,
+.scene .scene-name,
+.scene .whisper,
+.scene .lunelle {
+  pointer-events: none;
+}
+
+/* Hotspots always above decoration */
+.scene .hotspot,
+.scene .petal {
+  z-index: 50;
+}
+
+/* TEMPORARY: shows where hotspots sit. Delete when done. */
+.scene .hotspot {
+  outline: 2px dashed rgba(255, 255, 255, 0.6);
+}
