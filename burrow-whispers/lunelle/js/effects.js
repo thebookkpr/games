@@ -1,4 +1,5 @@
-/* One More Little Step — effects.js V1.2
+/* One More Little Step — effects.js V1.3
+   V1.3: Scene 4 recipe (soft glow around the moth).
    V1.2: Scene 3 recipe (glow pulse in the clearing).
    V1.1: Scene 2 recipe (silver orb pulse).
    Part 1 of 1 (JavaScript Part 3)
@@ -31,6 +32,10 @@ const Effects = (() => {
     clearing: {
       fireflies: 10, particles: 10, sparkles: 0, fog: true,
       reflection: { x: 57.5, y: 45, w: 10, h: 20 }
+    },
+    moth: {
+      fireflies: 10, particles: 10, sparkles: 0, fog: true,
+      reflection: { x: 56.5, y: 22, w: 13, h: 22 }
     },
     default: { fireflies: 8, particles: 8, sparkles: 0, fog: true }
   };
