@@ -1,4 +1,5 @@
-/* One More Little Step — game.js V1.0 */
+/* One More Little Step — game.js V1.1
+   V1.1: gentle first-time tutorial (Scene 1 only) */
 
 const Game = (() => {
   const stage = document.getElementById("game");
@@ -38,6 +39,7 @@ const Game = (() => {
             style="left:${L.x}%;bottom:${L.bottom}%;width:${L.w}%">
        <div class="crest" style="left:${L.x + L.w * 0.4}%;bottom:${L.bottom + 30}%"></div>
        <p class="whisper"></p>
+       <p class="hint"></p>
        <button class="next-btn">${i === TOTAL - 1 ? "One more little step" : "Next"}</button>`;
 
     s.hotspots.forEach(h => {
@@ -99,6 +101,42 @@ const Game = (() => {
     c.classList.add("shimmer");
   }
 
+  /* ---------- Tutorial (Scene 1 only, once per session) ---------- */
+  let tutorialDone = false, hintTimer, glowTimer, hintHide;
+
+  function showHint(text, ms) {
+    const h = el().querySelector(".hint");
+    h.textContent = text;
+    h.classList.add("show");
+    clearTimeout(hintHide);
+    if (ms) hintHide = setTimeout(() => h.classList.remove("show"), ms);
+  }
+
+  function stopTutorialTimers() {
+    clearTimeout(hintTimer);
+    clearTimeout(glowTimer);
+  }
+
+  function startTutorial() {
+    stopTutorialTimers();
+    const s = scene();
+    if (!s.hint || tutorialDone) return;
+    hintTimer = setTimeout(() => showHint(s.hint), 2500);
+    glowTimer = setTimeout(() => {
+      el().querySelectorAll(".hotspot:not(.found)")
+        .forEach(b => b.classList.add("hint-glow"));
+    }, 8000);
+  }
+
+  function endTutorial() {
+    if (tutorialDone || !scene().hint) return;
+    tutorialDone = true;
+    stopTutorialTimers();
+    el().querySelectorAll(".hint-glow")
+      .forEach(b => b.classList.remove("hint-glow"));
+    showHint(scene().hint2, 4500);
+  }
+
   /* ---------- Interaction ---------- */
   function onHotspot(s, h, btn, e) {
     if (btn.classList.contains("found")) return;
@@ -113,6 +151,7 @@ const Game = (() => {
     courage += h.courage;
     updateMeter();
     whisper(h.whisper);
+    endTutorial();
     shimmer();
     sv();
   }
@@ -148,12 +187,14 @@ const Game = (() => {
       updateMeter();
       updatePetals();
       fx("start", el());
+      startTutorial();
       sv();
     });
   }
 
   function goTitle() {
     swap(() => {
+      stopTutorialTimers();
       sceneEls.forEach(s => s.classList.remove("active"));
       current = -1;
       titleEl.classList.add("active");
@@ -185,3 +226,4 @@ const Game = (() => {
     setState: s => { courage = s.courage; petalsGot = s.petalsGot; }
   };
 })();
+      
