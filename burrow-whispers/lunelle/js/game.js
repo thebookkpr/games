@@ -1,4 +1,6 @@
-/* One More Little Step — game.js V1.7
+/* One More Little Step — game.js V1.8
+   V1.8: petal hint after 1 second; scenes with petalPoint get an arrow, others just ask the player to find the petal
+   V1.7
    V1.7: blinking arrow and text pointing to the hidden petal (scenes with petalHint)
    V1.6
    V1.6: sound hooks (audio.js) and a Sound on/off button in Settings
@@ -35,9 +37,11 @@ const Game = (() => {
   /* Blinking text and arrow that point at the hidden petal (scenes with petalHint) */
   function petalHintHTML(s) {
     if (!s.petalHint) return "";
+    if (!s.petalPoint)                                     /* challenge only, no arrow */
+      return `<div class="petal-hint-text" style="left:50%;top:16%">${s.petalHint}</div>`;
     const cx = s.petal.x + 2;                              /* petal is 4% wide */
     const tx = Math.min(Math.max(cx, 15), 85);             /* keep the text on screen */
-    return `<div class="petal-hint-text" style="left:${tx}%;top:${s.petal.y - 18}%">${s.petalHint}</div>
+    return `<div class="petal-hint-text" style="left:${tx}%;top:${Math.max(s.petal.y - 18, 14)}%">${s.petalHint}</div>
             <div class="petal-hint-arrow" style="left:${cx}%;top:${s.petal.y - 10}%">&#9660;</div>`;
   }
 
@@ -195,8 +199,8 @@ const Game = (() => {
     petalHintTimer = setTimeout(() => {
       if (current < 0 || petalsGot[current]) return;
       el().querySelectorAll(".petal-hint-text, .petal-hint-arrow").forEach(x => x.classList.add("show"));
-      petalEls[current].classList.add("hinted");
-    }, 4000);                                  /* let the Next button and chime land first */
+      if (s.petalPoint) petalEls[current].classList.add("hinted");
+    }, 1000);                                  /* one second after the meter fills */
   }
 
   /* ---------- Idle reminder (every scene with hotspots) ---------- */
