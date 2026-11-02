@@ -1,4 +1,5 @@
-/* One More Little Step — scenes.js V1.7
+/* One More Little Step — scenes.js V1.8
+   V1.8: Scene 2 petal moved to the left rock; Scene 3 (The Clearing) hotspots and petal placed.
    V1.7: Scene 2 (The Silver Light) hotspots and petal placed on the real art.
    V1.6: Scene 1 extra hotspot moved to the far-left lotus so the five spots spread across the pond.
    V1.5: Scene 1 moon hotspot moved to the rocky hill (the moon was too
@@ -68,8 +69,8 @@ const SCENES = [
       { id: "roots",    kind: "listen", courage: 1,
         x: 68, y: 58, w: 12, h: 18, whisper: "" }
     ],
-    /* tucked beside the rock at lower right */
-    petal: { x: 82, y: 82 }
+    /* tucked on the mossy rock at lower left */
+    petal: { x: 11.5, y: 73 }
   },
   {
     id: "clearing",
@@ -77,8 +78,25 @@ const SCENES = [
     background: "images/scene-clearing.jpg",
     lunelle: { src: "images/sprites/lunelle-clearing.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
-    hotspots: [],
-    petal: { x: 70, y: 60 }
+    hotspots: [
+      /* the mossy boulder, left */
+      { id: "boulder",   kind: "watch",  courage: 1,
+        x: 17.5, y: 52, w: 12, h: 13, whisper: "" },
+      /* the glowing petals resting in the grass */
+      { id: "petals",    kind: "wonder", courage: 1,
+        x: 33, y: 83, w: 12, h: 13, whisper: "" },
+      /* the fireflies in the trees, centre */
+      { id: "fireflies", kind: "watch",  courage: 1,
+        x: 40, y: 34, w: 17, h: 20, whisper: "" },
+      /* the silver glow gathered in the clearing */
+      { id: "glow",      kind: "wonder", courage: 1,
+        x: 58, y: 45, w: 9.5, h: 19, whisper: "" },
+      /* the old fallen log, lower right */
+      { id: "log",       kind: "listen", courage: 1,
+        x: 72, y: 80, w: 14, h: 14, whisper: "" }
+    ],
+    /* at the foot of the living tree, right of centre */
+    petal: { x: 72, y: 50 }
   },
   {
     id: "moth",
