@@ -39,7 +39,8 @@
 .courage-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, var(--lavender), var(--silver));
+  background-color: var(--lavender);
+  background-image: linear-gradient(90deg, var(--lavender), var(--silver));
   border-radius: 999px;
   box-shadow: 0 0 10px var(--silver-glow);
   transition: width var(--fade-slow) var(--ease-gentle);
