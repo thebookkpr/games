@@ -1,10 +1,13 @@
-/* One More Little Step — game.js V1.2
+/* One More Little Step — game.js V1.4
    V1.1: gentle first-time tutorial (Scene 1 only)
-   V1.2: missing Lunelle sprite files are hidden instead of showing a broken image */
+   V1.2: missing Lunelle sprite files are hidden instead of showing a broken image
+   V1.3: crest offset scales with sprite size; optional vanishAfter fades Lunelle out
+   V1.4: idle reminder: unfound hotspots glow again after 30 seconds without a discovery */
 
 const Game = (() => {
   const stage = document.getElementById("game");
   const TOTAL = SCENES.length;
+  const IDLE_MS = 30000;          /* time without a discovery before the reminder */
   let current = -1;
   let courage = 0;
   let found = 0;
@@ -39,7 +42,7 @@ const Game = (() => {
        <img class="lunelle" src="${L.src}" alt="Lunelle"
             onerror="this.style.display='none';this.nextElementSibling.style.display='none'"
             style="left:${L.x}%;bottom:${L.bottom}%;width:${L.w}%">
-       <div class="crest" style="left:${L.x + L.w * 0.4}%;bottom:${L.bottom + 30}%"></div>
+       <div class="crest" style="left:${L.x + L.w * 0.4}%;bottom:${L.bottom + 30 * (L.w / 28)}%"></div>
        <p class="whisper"></p>
        <p class="hint"></p>
        <button class="next-btn">${i === TOTAL - 1 ? "One more little step" : "Next"}</button>`;
@@ -97,10 +100,25 @@ const Game = (() => {
   }
 
   function shimmer() {
+    const sprite = el().querySelector(".lunelle");
+    if (sprite && sprite.classList.contains("gone")) return;  /* she has left, no crest to shimmer */
     const c = el().querySelector(".crest");
     c.classList.remove("shimmer");
     void c.offsetWidth;            /* restart the animation */
     c.classList.add("shimmer");
+  }
+
+  /* ---------- Lunelle vanish (optional, set per scene with vanishAfter) ---------- */
+  let vanishTimer;
+
+  function startVanishTimer() {
+    clearTimeout(vanishTimer);
+    const sprite = el().querySelector(".lunelle");
+    if (!sprite) return;
+    sprite.classList.remove("gone");
+    const ms = scene().lunelle.vanishAfter;
+    if (!ms) return;
+    vanishTimer = setTimeout(() => sprite.classList.add("gone"), ms);
   }
 
   /* ---------- Tutorial (Scene 1 only, once per session) ---------- */
@@ -139,6 +157,28 @@ const Game = (() => {
     showHint(scene().hint2, 4500);
   }
 
+  /* ---------- Idle reminder (every scene with hotspots) ---------- */
+  let idleTimer;
+
+  function resetIdle() {
+    clearTimeout(idleTimer);
+    if (current < 0) return;
+    const left = el().querySelectorAll(".hotspot:not(.found)").length;
+    if (!left) return;                          /* everything found, no reminder needed */
+    idleTimer = setTimeout(idleNudge, IDLE_MS);
+  }
+
+  function idleNudge() {
+    if (current < 0 || moving) return resetIdle();
+    el().querySelectorAll(".hotspot:not(.found)").forEach(b => {
+      b.classList.remove("hint-glow");
+      void b.offsetWidth;                       /* restart the glow animation */
+      b.classList.add("hint-glow");
+    });
+    if (scene().hint) showHint(scene().hint, 4500);
+    resetIdle();                                /* repeat in another 30 seconds */
+  }
+
   /* ---------- Interaction ---------- */
   function onHotspot(s, h, btn, e) {
     if (btn.classList.contains("found")) return;
@@ -155,6 +195,7 @@ const Game = (() => {
     whisper(h.whisper);
     endTutorial();
     shimmer();
+    resetIdle();
     sv();
   }
 
@@ -164,6 +205,7 @@ const Game = (() => {
     btn.classList.add("collected");
     updatePetals();
     shimmer();
+    resetIdle();
     sv();
   }
 
@@ -190,6 +232,8 @@ const Game = (() => {
       updatePetals();
       fx("start", el());
       startTutorial();
+      startVanishTimer();
+      resetIdle();
       sv();
     });
   }
@@ -197,6 +241,8 @@ const Game = (() => {
   function goTitle() {
     swap(() => {
       stopTutorialTimers();
+      clearTimeout(vanishTimer);
+      clearTimeout(idleTimer);
       sceneEls.forEach(s => s.classList.remove("active"));
       current = -1;
       titleEl.classList.add("active");
