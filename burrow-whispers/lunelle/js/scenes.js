@@ -1,4 +1,5 @@
-/* One More Little Step — scenes.js V1.9
+/* One More Little Step — scenes.js V1.10
+   V1.10: Scene 5 (Farther From the Burrow) hotspots and petal placed. Petals moved: Scene 2 to the top of the left rock, Scene 3 onto the left mushroom. Scene 1 gets a sixth hotspot on the second left lotus (courage still needs 5).
    V1.9: Scene 3 petal moved beside the left tree (it vanished near the bright glow); Scene 4 (The Moth) hotspots and petal placed.
    V1.8: Scene 2 petal moved to the left rock; Scene 3 (The Clearing) hotspots and petal placed.
    V1.7: Scene 2 (The Silver Light) hotspots and petal placed on the real art.
@@ -43,7 +44,10 @@ const SCENES = [
         x: 57, y: 76, w: 8, h: 18, whisper: "" },
       /* the glowing Moon Lotus on the far left of the pond */
       { id: "lotus-left", kind: "wonder", courage: 1,
-        x: 15.7, y: 51.5, w: 9, h: 14, whisper: "" }
+        x: 15.5, y: 53, w: 6, h: 11, whisper: "" },
+      /* the larger lotus beside it, nearer the shore */
+      { id: "lotus-shore", kind: "watch", courage: 1,
+        x: 21.8, y: 57.5, w: 5.5, h: 10, whisper: "" }
     ],
     petal: { x: 77, y: 79 }
   },
@@ -70,8 +74,8 @@ const SCENES = [
       { id: "roots",    kind: "listen", courage: 1,
         x: 68, y: 58, w: 12, h: 18, whisper: "" }
     ],
-    /* tucked on the mossy rock at lower left */
-    petal: { x: 11.5, y: 73 }
+    /* on the top of the mossy rock, lower left */
+    petal: { x: 8.5, y: 68 }
   },
   {
     id: "clearing",
@@ -96,8 +100,8 @@ const SCENES = [
       { id: "log",       kind: "listen", courage: 1,
         x: 72, y: 80, w: 14, h: 14, whisper: "" }
     ],
-    /* beside the living tree on the left, in the dark foliage */
-    petal: { x: 12.5, y: 45 }
+    /* on the glowing mushroom at the left */
+    petal: { x: 5.6, y: 52.5 }
   },
   {
     id: "moth",
@@ -131,7 +135,24 @@ const SCENES = [
     background: "images/scene-hilltop.jpg",
     lunelle: { src: "images/sprites/lunelle-hilltop.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
-    hotspots: [],
-    petal: { x: 70, y: 60 }
+    hotspots: [
+      /* the silver trail of light winding through the valley */
+      { id: "trail",     kind: "wonder", courage: 1,
+        x: 12.5, y: 38, w: 11, h: 15, whisper: "" },
+      /* the fireflies drifting over the pines */
+      { id: "fireflies", kind: "watch",  courage: 1,
+        x: 20, y: 56, w: 11, h: 14, whisper: "" },
+      /* the wildflowers dotting the meadow */
+      { id: "meadow",    kind: "listen", courage: 1,
+        x: 34, y: 80, w: 14, h: 12, whisper: "" },
+      /* the distant lake, shining in the valley */
+      { id: "lake",      kind: "wonder", courage: 1,
+        x: 55.5, y: 37, w: 11, h: 12, whisper: "" },
+      /* the mossy boulders by the tree */
+      { id: "boulder",   kind: "watch",  courage: 1,
+        x: 72, y: 54, w: 15, h: 17, whisper: "" }
+    ],
+    /* tucked among the dark pines on the hillside */
+    petal: { x: 29, y: 55 }
   }
 ];
