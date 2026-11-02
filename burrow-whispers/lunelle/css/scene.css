@@ -153,7 +153,7 @@
 /* Hotspots always above decoration */
 .scene .hotspot,
 .scene .petal {
-  z-index: 50;
+  z-index: 35;
 }
 
 
@@ -166,4 +166,38 @@
 
 .fade-overlay {
   pointer-events: none;
+}
+
+/* Gentle tutorial hint */
+.hint {
+  position: absolute;
+  left: 50%;
+  bottom: 14%;
+  z-index: var(--z-ui);
+  max-width: 70%;
+  margin: 0;
+  transform: translateX(-50%);
+  text-align: center;
+  font-style: italic;
+  font-size: clamp(0.85rem, 2vw, 1.2rem);
+  color: var(--ivory);
+  text-shadow: 0 2px 8px rgba(27, 24, 48, 0.7);
+  opacity: 0;
+  transition: opacity var(--fade-slow) var(--ease-gentle);
+  pointer-events: none;
+}
+.hint.show { opacity: 1; }
+
+/* First-time glow: a soft pulse, never a puzzle marker */
+.hotspot.hint-glow {
+  animation: hint-glow 2.4s ease-in-out 2;
+}
+@keyframes hint-glow {
+  0%, 100% { background: transparent; box-shadow: none; }
+  50% {
+    background: radial-gradient(circle,
+      rgba(230, 235, 242, 0.28) 0%,
+      rgba(230, 235, 242, 0) 70%);
+    box-shadow: 0 0 22px var(--silver-glow);
+  }
 }
