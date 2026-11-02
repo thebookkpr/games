@@ -1,4 +1,6 @@
-/* One More Little Step — scenes.js V1.5
+/* One More Little Step — scenes.js V1.7
+   V1.7: Scene 2 (The Silver Light) hotspots and petal placed on the real art.
+   V1.6: Scene 1 extra hotspot moved to the far-left lotus so the five spots spread across the pond.
    V1.5: Scene 1 moon hotspot moved to the rocky hill (the moon was too
    bright for the tutorial glow to show).
    Scene data only. No behavior lives here.
@@ -37,9 +39,9 @@ const SCENES = [
       /* the grass tufts along the shoreline */
       { id: "reeds",      kind: "listen", courage: 1,
         x: 57, y: 76, w: 8, h: 18, whisper: "" },
-      /* the rocky hill and tree, upper right (foreshadows Scene 5) */
-      { id: "hill",       kind: "wonder", courage: 1,
-        x: 61, y: 35, w: 12, h: 17, whisper: "" }
+      /* the glowing Moon Lotus on the far left of the pond */
+      { id: "lotus-left", kind: "wonder", courage: 1,
+        x: 15.7, y: 51.5, w: 9, h: 14, whisper: "" }
     ],
     petal: { x: 77, y: 79 }
   },
@@ -49,8 +51,25 @@ const SCENES = [
     background: "images/scene-silver-light.jpg",
     lunelle: { src: "images/sprites/lunelle-light.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
-    hotspots: [],   /* fill in when the art is placed */
-    petal: { x: 70, y: 60 }
+    hotspots: [
+      /* the glowing silver orb and its trail */
+      { id: "orb",      kind: "wonder", courage: 1,
+        x: 61, y: 36, w: 11, h: 18, whisper: "" },
+      /* the pale glowing flowers, far left */
+      { id: "flowers",  kind: "watch",  courage: 1,
+        x: 9, y: 55, w: 11, h: 14, whisper: "" },
+      /* the fireflies drifting among the trees */
+      { id: "fireflies", kind: "watch", courage: 1,
+        x: 28, y: 30, w: 12, h: 14, whisper: "" },
+      /* the fallen petals along the path */
+      { id: "petals",   kind: "wonder", courage: 1,
+        x: 40, y: 76, w: 14, h: 16, whisper: "" },
+      /* the old mossy roots of the great tree */
+      { id: "roots",    kind: "listen", courage: 1,
+        x: 68, y: 58, w: 12, h: 18, whisper: "" }
+    ],
+    /* tucked beside the rock at lower right */
+    petal: { x: 82, y: 82 }
   },
   {
     id: "clearing",
