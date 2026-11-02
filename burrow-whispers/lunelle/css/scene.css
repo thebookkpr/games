@@ -156,10 +156,6 @@
   z-index: 50;
 }
 
-/* TEMPORARY: shows where hotspots sit. Delete when done. */
-.scene .hotspot {
-  outline: 2px dashed rgba(255, 255, 255, 0.6);
-}
 
 .scene .hotspot,
 .scene .petal,
