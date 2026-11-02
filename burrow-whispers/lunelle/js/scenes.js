@@ -1,4 +1,5 @@
-/* One More Little Step — scenes.js V1.8
+/* One More Little Step — scenes.js V1.9
+   V1.9: Scene 3 petal moved beside the left tree (it vanished near the bright glow); Scene 4 (The Moth) hotspots and petal placed.
    V1.8: Scene 2 petal moved to the left rock; Scene 3 (The Clearing) hotspots and petal placed.
    V1.7: Scene 2 (The Silver Light) hotspots and petal placed on the real art.
    V1.6: Scene 1 extra hotspot moved to the far-left lotus so the five spots spread across the pond.
@@ -95,8 +96,8 @@ const SCENES = [
       { id: "log",       kind: "listen", courage: 1,
         x: 72, y: 80, w: 14, h: 14, whisper: "" }
     ],
-    /* at the foot of the living tree, right of centre */
-    petal: { x: 72, y: 50 }
+    /* beside the living tree on the left, in the dark foliage */
+    petal: { x: 12.5, y: 45 }
   },
   {
     id: "moth",
@@ -104,8 +105,25 @@ const SCENES = [
     background: "images/scene-moth.jpg",
     lunelle: { src: "images/sprites/lunelle-moth.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
-    hotspots: [],
-    petal: { x: 70, y: 60 }
+    hotspots: [
+      /* the fireflies among the trees, upper left */
+      { id: "fireflies", kind: "watch",  courage: 1,
+        x: 18, y: 24, w: 12, h: 14, whisper: "" },
+      /* the stepping stones along the path */
+      { id: "stones",    kind: "listen", courage: 1,
+        x: 33, y: 72, w: 14, h: 14, whisper: "" },
+      /* the luminous moon moth */
+      { id: "moth",      kind: "wonder", courage: 1,
+        x: 57.5, y: 25, w: 11, h: 16, whisper: "" },
+      /* the big mossy boulder, right */
+      { id: "boulder",   kind: "watch",  courage: 1,
+        x: 66, y: 66, w: 13, h: 15, whisper: "" },
+      /* the glowing blossoms, far right */
+      { id: "blossoms",  kind: "wonder", courage: 1,
+        x: 82, y: 63, w: 8, h: 15, whisper: "" }
+    ],
+    /* at the foot of the tall tree, centre-left, in the dark ferns */
+    petal: { x: 41.5, y: 46 }
   },
   {
     id: "hilltop",
