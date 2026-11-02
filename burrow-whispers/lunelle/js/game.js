@@ -7,7 +7,7 @@
 const Game = (() => {
   const stage = document.getElementById("game");
   const TOTAL = SCENES.length;
-  const IDLE_MS = 30000;          /* time without a discovery before the reminder */
+  const IDLE_MS = 15000;          /* time without a discovery before the reminder */
   let current = -1;
   let courage = 0;
   let found = 0;
