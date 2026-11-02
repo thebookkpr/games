@@ -1,4 +1,5 @@
-/* One More Little Step — scenes.js V1.12
+/* One More Little Step — scenes.js V1.13
+   V1.13: petal hints on all scenes (Scenes 1-3 point with an arrow, 4-5 only challenge); Scene 2 petal on the middle of the big tree; Scene 3 petal on the rock.
    V1.12: petalHint text on Scenes 1 and 2 (blinking arrow to the hidden petal once courage is full).
    V1.11: Scene 1 second left-lotus hotspot moved to the larger lotus nearer the middle.
    V1.10: Scene 5 (Farther From the Burrow) hotspots and petal placed. Petals moved: Scene 2 to the top of the left rock, Scene 3 onto the left mushroom. Scene 1 gets a sixth hotspot on the second left lotus (courage still needs 5).
@@ -30,6 +31,7 @@ const SCENES = [
      lunelle: { src: "images/sprites/lunelle-pond.png", x: 4, bottom: 4, w: 14, vanishAfter: 5000 },
     courageRequired: 5,
     petalHint: "Did you forget something?",
+    petalPoint: true,
     hint: "Tap what catches your eye",
     hint2: "Each discovery fills your Courage",
     hotspots: [
@@ -61,6 +63,7 @@ const SCENES = [
     lunelle: { src: "images/sprites/lunelle-light.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
     petalHint: "A silver petal is hiding here",
+    petalPoint: true,
     hotspots: [
       /* the glowing silver orb and its trail */
       { id: "orb",      kind: "wonder", courage: 1,
@@ -78,8 +81,8 @@ const SCENES = [
       { id: "roots",    kind: "listen", courage: 1,
         x: 68, y: 58, w: 12, h: 18, whisper: "" }
     ],
-    /* on the top of the mossy rock, lower left */
-    petal: { x: 8.5, y: 68 }
+    /* on the trunk of the big tree, right side, middle of the tree */
+    petal: { x: 91, y: 31 }
   },
   {
     id: "clearing",
@@ -87,10 +90,12 @@ const SCENES = [
     background: "images/scene-clearing.jpg",
     lunelle: { src: "images/sprites/lunelle-clearing.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
+    petalHint: "Another silver petal is hiding here",
+    petalPoint: true,
     hotspots: [
       /* the mossy boulder, left */
       { id: "boulder",   kind: "watch",  courage: 1,
-        x: 17.5, y: 52, w: 12, h: 13, whisper: "" },
+        x: 17.5, y: 54, w: 8, h: 10.5, whisper: "" },
       /* the glowing petals resting in the grass */
       { id: "petals",    kind: "wonder", courage: 1,
         x: 33, y: 83, w: 12, h: 13, whisper: "" },
@@ -104,8 +109,8 @@ const SCENES = [
       { id: "log",       kind: "listen", courage: 1,
         x: 72, y: 80, w: 14, h: 14, whisper: "" }
     ],
-    /* on the glowing mushroom at the left */
-    petal: { x: 5.6, y: 52.5 }
+    /* on the mossy rock at the left */
+    petal: { x: 25, y: 52.5 }
   },
   {
     id: "moth",
@@ -113,6 +118,7 @@ const SCENES = [
     background: "images/scene-moth.jpg",
     lunelle: { src: "images/sprites/lunelle-moth.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
+    petalHint: "Can you find the hidden petal?",
     hotspots: [
       /* the fireflies among the trees, upper left */
       { id: "fireflies", kind: "watch",  courage: 1,
@@ -139,6 +145,7 @@ const SCENES = [
     background: "images/scene-hilltop.jpg",
     lunelle: { src: "images/sprites/lunelle-hilltop.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
+    petalHint: "Can you find the hidden petal?",
     hotspots: [
       /* the silver trail of light winding through the valley */
       { id: "trail",     kind: "wonder", courage: 1,
