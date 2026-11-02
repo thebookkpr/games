@@ -1,4 +1,6 @@
-/* One More Little Step — audio.js V1.1
+/* One More Little Step — audio.js V1.2
+   V1.2: crickets slowed down further
+   V1.1
    V1.1: crickets made much softer, lower and rarer (the old ones sounded like beeps)
    Part 1 of 1 (JavaScript Part 5)
    Gentle night sounds made live with the Web Audio API (no sound files):
@@ -115,7 +117,7 @@ const Sound = (() => {
       }
       o.start(t0); o.stop(t0 + 0.5);
     }
-    setTimeout(() => cricketLoop(f), rand(3000, 7000));
+    setTimeout(() => cricketLoop(f), rand(6000, 12000));
   }
 
   function plinkLoop() {
@@ -216,4 +218,4 @@ const Sound = (() => {
 
   return { scene, discover, petal, ready, toggle, isOn: () => on, unlock };
 })();
-               
+                                   
