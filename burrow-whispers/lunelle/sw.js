@@ -1,0 +1,75 @@
+/* One More Little Step — sw.js V1.0
+   Network-first: online = newest files, offline = cached copy.
+   Bump VERSION when you update the game (good habit, not required). */
+
+const VERSION = "omls-v1";
+
+const FILES = [
+  "./",
+  "index.html",
+  "manifest.json",
+  "css/variables.css",
+  "css/base.css",
+  "css/title.css",
+  "css/scene.css",
+  "css/ui.css",
+  "css/effects.css",
+  "css/responsive.css",
+  "js/scenes.js",
+  "js/effects.js",
+  "js/audio.js",
+  "js/game.js",
+  "js/save.js",
+  "images/title-screen.jpg",
+  "images/scene-pond.jpg",
+  "images/scene-silver-light.jpg",
+  "images/scene-clearing.jpg",
+  "images/scene-moth.jpg",
+  "images/scene-hilltop.jpg",
+  "images/sprites/lunelle-pond.png",
+  "images/sprites/lunelle-light.png",
+  "images/sprites/lunelle-clearing.png",
+  "images/sprites/lunelle-moth.png",
+  "images/sprites/lunelle-hilltop.png",
+  "images/sprites/silver-petal.png",
+  "images/icon-192.png",
+  "images/icon-512.png"
+];
+
+/* Install: save every file. One missing file will not break the rest. */
+self.addEventListener("install", e => {
+  e.waitUntil(
+    caches.open(VERSION)
+      .then(c => Promise.all(FILES.map(f => c.add(f).catch(() => {}))))
+      .then(() => self.skipWaiting())
+  );
+});
+
+/* Activate: delete caches from older versions */
+self.addEventListener("activate", e => {
+  e.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
+  );
+});
+
+/* Fetch: try the network first, keep a fresh copy, fall back to cache */
+self.addEventListener("fetch", e => {
+  const req = e.request;
+  if (req.method !== "GET" || new URL(req.url).origin !== self.location.origin) return;
+  e.respondWith(
+    fetch(req)
+      .then(res => {
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(VERSION).then(c => c.put(req, copy));
+        }
+        return res;
+      })
+      .catch(() =>
+        caches.match(req, { ignoreSearch: true })
+          .then(hit => hit || caches.match("index.html"))
+      )
+  );
+});
