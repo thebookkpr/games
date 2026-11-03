@@ -1,8 +1,9 @@
-/* One More Little Step — sw.js V1.0
-   Network-first: online = newest files, offline = cached copy.
+/* One More Little Step — sw.js V1.1
+   V1.1: cache name bumped to omls-v2 so old saved files are replaced (scene.css fade fix for Lunelle).
+   V1.0: network-first: online = newest files, offline = cached copy.
    Bump VERSION when you update the game (good habit, not required). */
 
-const VERSION = "omls-v1";
+const VERSION = "omls-v2";
 
 const FILES = [
   "./",
