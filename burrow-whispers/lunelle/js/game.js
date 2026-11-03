@@ -1,4 +1,5 @@
-/* One More Little Step — game.js V1.8
+/* One More Little Step — game.js V1.9
+   V1.9: tutorial now runs per scene (Scenes 1 to 3 show "Tap what catches your eye"); petalHintY lets a scene lower its petal hint text
    V1.8: petal hint after 1 second; scenes with petalPoint get an arrow, others just ask the player to find the petal
    V1.7
    V1.7: blinking arrow and text pointing to the hidden petal (scenes with petalHint)
@@ -38,7 +39,7 @@ const Game = (() => {
   function petalHintHTML(s) {
     if (!s.petalHint) return "";
     if (!s.petalPoint)                                     /* challenge only, no arrow */
-      return `<div class="petal-hint-text" style="left:50%;top:16%">${s.petalHint}</div>`;
+      return `<div class="petal-hint-text" style="left:50%;top:${s.petalHintY || 16}%">${s.petalHint}</div>`;
     const cx = s.petal.x + 2;                              /* petal is 4% wide */
     const tx = Math.min(Math.max(cx, 15), 85);             /* keep the text on screen */
     return `<div class="petal-hint-text" style="left:${tx}%;top:${Math.max(s.petal.y - 18, 14)}%">${s.petalHint}</div>
@@ -143,9 +144,9 @@ const Game = (() => {
     if (!ms) return;
     vanishTimer = setTimeout(() => sprite.classList.add("gone"), ms);
   }
-
-  /* ---------- Tutorial (Scene 1 only, once per session) ---------- */
-  let tutorialDone = false, hintTimer, glowTimer, hintHide;
+  
+    /* ---------- Tutorial (Scenes with a hint, once per scene per session) ---------- */
+  let tutorialDone = SCENES.map(() => false), hintTimer, glowTimer, hintHide;
 
   function showHint(text, ms) {
     const h = el().querySelector(".hint");
@@ -163,7 +164,7 @@ const Game = (() => {
   function startTutorial() {
     stopTutorialTimers();
     const s = scene();
-    if (!s.hint || tutorialDone) return;
+    if (!s.hint || tutorialDone[current]) return;
     hintTimer = setTimeout(() => showHint(s.hint), 2500);
     glowTimer = setTimeout(() => {
       el().querySelectorAll(".hotspot:not(.found)")
@@ -172,12 +173,13 @@ const Game = (() => {
   }
 
   function endTutorial() {
-    if (tutorialDone || !scene().hint) return;
-    tutorialDone = true;
+    if (tutorialDone[current] || !scene().hint) return;
+    tutorialDone[current] = true;
     stopTutorialTimers();
     el().querySelectorAll(".hint-glow")
       .forEach(b => b.classList.remove("hint-glow"));
-    showHint(scene().hint2, 4500);
+    if (scene().hint2) showHint(scene().hint2, 4500);
+    else el().querySelector(".hint").classList.remove("show");
   }
 
   /* ---------- Petal hint (after the meter is full and the petal is still hidden) ---------- */
@@ -266,8 +268,8 @@ const Game = (() => {
       b.classList.toggle("found", foundIds[i].includes(b.getAttribute("aria-label"))));
     petalEls[i].classList.toggle("collected", petalsGot[i]);
   }
-
-  /* ---------- Navigation ---------- */
+  
+    /* ---------- Navigation ---------- */
   function swap(fn) {
     if (moving) return;
     moving = true;
@@ -340,6 +342,7 @@ const Game = (() => {
     petalsGot = new Array(TOTAL).fill(false);
     foundIds = SCENES.map(() => []);
     courage = 0;
+    tutorialDone = SCENES.map(() => false);    /* a new journey shows the hints again */
     sceneEls.forEach((_, n) => applyFound(n));
     goTo(0);
   }
@@ -349,7 +352,8 @@ const Game = (() => {
     foundIds = s.foundIds.map(a => [...a]);
     courage = s.courage;
     sceneEls.forEach((_, n) => applyFound(n));
-    tutorialDone = true;                       /* they have played before */
+    /* earlier scenes are done; the current one is done if they already found something */
+    tutorialDone = SCENES.map((_, n) => n < s.current || (n === s.current && s.foundIds[n].length > 0));
     goTo(s.current, true);
   }
 
