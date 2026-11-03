@@ -1,4 +1,7 @@
-<!-- One More Little Step — index.html V1.2 -->
+<!-- One More Little Step — index.html V1.3
+     V1.3: service worker registered (sw.js) for offline play and install. Manifest linked.
+     V1.2: script tags use ?v=14 cache-busting. -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,7 +45,7 @@
         <button class="menu-btn" id="btn-credits">Credits</button>
       </nav>
       
-       <p class="version">V1.2</p>
+       <p class="version">V1.3</p>
       
     </section>
 
@@ -53,6 +56,13 @@
   <script src="js/audio.js"></script>
 <script src="js/game.js?v=14"></script>
   <script src="js/save.js"></script>
+
+  <script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () =>
+      navigator.serviceWorker.register("sw.js"));
+  }
+  </script>
   
 </body>
 </html>
