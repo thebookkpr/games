@@ -1,10 +1,7 @@
-/* One More Little Step — scene.css V1.3
+/* One More Little Step — scene.css V1.4
+   V1.4: Lunelle fades out smoothly when she vanishes (transition and .gone rule).
    V1.3: petal hint (blinking text and arrow) and a gentle glow on the hinted petal.
    V1.2 */
-
-/* Scene background art is set per scene from JS or inline style
-   Sprite image location moved to background:
-   url("../images/sprites/silver-petal.png") center / contain no-repeat;*/
 
 .scene .bg {
   transition: filter var(--fade-slow) var(--ease-gentle);
@@ -45,7 +42,11 @@
   height: auto;
   pointer-events: none;
   filter: drop-shadow(0 6px 10px rgba(27, 24, 48, 0.35));
+   transition: opacity 2s var(--ease-gentle);
 }
+   .lunelle.gone {
+  opacity: 0;
+   }
 
 /* Hotspots: invisible hit areas, positioned inline with
    left, top, width, height in percent */
