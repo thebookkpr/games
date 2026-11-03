@@ -1,4 +1,7 @@
-/* One More Little Step — scenes.js V1.13
+/* One More Little Step — scenes.js V1.14
+   V1.14: Scene 1 reeds hotspot replaced by the far-right large lotus (lotus-right) and a moon hotspot added (7 hotspots, 5 needed).
+   Scene 2 and Scene 3 get the "Tap what catches your eye" hint. Scene 5 petal moved to the pine cluster (x 41, y 59) and petalHintY: 28 added so the hint text sits below the moon.
+
    V1.13: petal hints on all scenes (Scenes 1-3 point with an arrow, 4-5 only challenge); Scene 2 petal on the middle of the big tree; Scene 3 petal on the rock.
    V1.12: petalHint text on Scenes 1 and 2 (blinking arrow to the hidden petal once courage is full).
    V1.11: Scene 1 second left-lotus hotspot moved to the larger lotus nearer the middle.
@@ -146,6 +149,7 @@ const SCENES = [
     lunelle: { src: "images/sprites/lunelle-hilltop.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
     petalHint: "Can you find the hidden petal?",
+     petalHintY: 28,
     hotspots: [
       /* the silver trail of light winding through the valley */
       { id: "trail",     kind: "wonder", courage: 1,
@@ -163,7 +167,7 @@ const SCENES = [
       { id: "boulder",   kind: "watch",  courage: 1,
         x: 72, y: 54, w: 15, h: 17, whisper: "" }
     ],
-    /* tucked among the dark pines on the hillside */
-    petal: { x: 29, y: 55 }
+    /* in the dark pine cluster, middle of the valley */
+petal: { x: 41, y: 59 }
   }
 ];
