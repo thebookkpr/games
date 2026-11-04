@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- The Book Keeper's Library (site menu) — index.html V1.1 · Part 1 of 1
+<!-- The Book Keeper's Library (site menu) — index.html V1.1 · Part 1 of 2
      V1.1: pet art removed. Painted room background (images/library-bg.jpg) and a
            closed-book sprite per world (images/book-*.png) with the title as live text
            on the book's label plate. Missing sprite falls back to a CSS leather book.
@@ -171,9 +171,95 @@
     }
     @media (prefers-reduced-motion: reduce) { .book-sprite { transition: none; } }
   </style>
-</head>
+  
+  </head>
 <body>
 
   <div class="room"></div>
   <div class="backdrop"></div>
-  <div class="fx-layer
+  <div class="fx-layer" id="fx"></div>
+
+  <main class="page">
+    <h1 class="library-title">The Book Keeper's Library</h1>
+    <p class="library-motto">Storybook worlds, kept with care.</p>
+    <div class="rule"></div>
+    <p class="library-tag">Choose a volume</p>
+    <ul class="shelf" id="shelf"></ul>
+    <p class="keeper">Kept by The Book Keeper</p>
+    <p class="version">V1.1</p>
+  </main>
+
+  <script>
+    /* ---------- Add new worlds here ----------
+       label = where the title sits on the book, in percent of the book image:
+       top, left, w (width), h (height). Adjust to line up with the label plate. */
+    const WORLDS = [
+      {
+        title: "Burrow Whispers",
+        kind: "Volume I · Gentle Fantasy",
+        desc: "A quiet world of little lives and moonlit woods, where small pets find wonder close to home.",
+        url: "burrow-whispers/",
+        sprite: "images/book-burrow-whispers.png",
+        label: { top: 30, left: 22, w: 56, h: 18 }
+      }
+    ];
+    const SHOW_COMING_SOON = true;   /* set false to hide the empty space on the shelf */
+
+    /* ---------- Build the shelf ---------- */
+    const shelf = document.getElementById("shelf");
+    const el = (tag, cls, text) => {
+      const n = document.createElement(tag);
+      if (cls) n.className = cls;
+      if (text) n.textContent = text;
+      return n;
+    };
+
+    WORLDS.forEach(w => {
+      const L = Object.assign({ top: 30, left: 22, w: 56, h: 18 }, w.label);
+      const li = el("li");
+      const a = el("a", "book");
+      a.href = w.url;
+
+      const cover = el("div", "book-cover");
+      const img = new Image();
+      img.className = "book-sprite";
+      img.alt = "";
+      img.onerror = () => a.classList.add("fallback");
+      img.src = w.sprite;
+      const label = el("span", "book-label", w.title);
+      label.style.cssText = `top:${L.top}%;left:${L.left}%;width:${L.w}%;height:${L.h}%`;
+      cover.append(img, label);
+
+      a.append(cover, el("p", "book-kind", w.kind), el("p", "book-desc", w.desc));
+      li.appendChild(a);
+      shelf.appendChild(li);
+    });
+
+    if (SHOW_COMING_SOON) {
+      const li = el("li");
+      li.appendChild(el("div", "book soon", "More volumes are being written."));
+      shelf.appendChild(li);
+    }
+
+    /* ---------- Candlelit effects (styles come from effects.css) ---------- */
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const fx = document.getElementById("fx");
+    function add(cls, style, vars) {
+      const d = el("div", cls);
+      if (style) d.style.cssText = style;
+      if (vars) Object.entries(vars).forEach(([k, v]) => d.style.setProperty(k, v));
+      fx.appendChild(d);
+    }
+    add("haze one"); add("haze two");
+    [[4, 2, 34, 40, 0], [66, 0, 34, 40, 2.2]].forEach(([x, y, w, h, d]) =>
+      add("candle", `left:${x}%;top:${y}%;width:${w}%;height:${h}%`, { "animation-delay": -d + "s" }));
+    for (let i = 0; i < 16; i++)
+      add("mote", `left:${rand(5, 95).toFixed(1)}%;top:${rand(10, 90).toFixed(1)}%`, {
+        "--dur": rand(5, 9).toFixed(1) + "s",
+        "--delay": (-rand(0, 9)).toFixed(1) + "s",
+        "--drift": rand(-30, 30).toFixed(0) + "px"
+      });
+  </script>
+
+</body>
+</html>
