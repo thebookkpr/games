@@ -1,7 +1,5 @@
 /* One More Little Step — scenes.js V1.14
-   V1.14: Scene 1 reeds hotspot replaced by the far-right large lotus (lotus-right) and a moon hotspot added (7 hotspots, 5 needed).
-   Scene 2 and Scene 3 get the "Tap what catches your eye" hint. Scene 5 petal moved to the pine cluster (x 41, y 59) and petalHintY: 28 added so the hint text sits below the moon.
-
+   V1.14: Scene 1 reeds hotspot replaced by the far-right large lotus (lotus-right) and a moon hotspot added (7 hotspots, 5 needed). Scene 2 and Scene 3 get the "Tap what catches your eye" hint. Scene 5 petal moved to the pine cluster (x 41, y 59) and petalHintY: 28 added so the hint text sits below the moon.
    V1.13: petal hints on all scenes (Scenes 1-3 point with an arrow, 4-5 only challenge); Scene 2 petal on the middle of the big tree; Scene 3 petal on the rock.
    V1.12: petalHint text on Scenes 1 and 2 (blinking arrow to the hidden petal once courage is full).
    V1.11: Scene 1 second left-lotus hotspot moved to the larger lotus nearer the middle.
@@ -31,7 +29,7 @@ const SCENES = [
     id: "pond",
     title: "Moonroot Pond",
     background: "images/scene-pond.jpg",
-     lunelle: { src: "images/sprites/lunelle-pond.png", x: 4, bottom: 4, w: 14, vanishAfter: 5000 },
+    lunelle: { src: "images/sprites/lunelle-pond.png", x: 4, bottom: 4, w: 14, vanishAfter: 5000 },
     courageRequired: 5,
     petalHint: "Did you forget something?",
     petalPoint: true,
@@ -47,15 +45,18 @@ const SCENES = [
       /* the firefly cluster, upper right */
       { id: "fireflies",  kind: "watch",  courage: 1,
         x: 74, y: 23, w: 13, h: 29, whisper: "" },
-      /* the grass tufts along the shoreline */
-      { id: "reeds",      kind: "listen", courage: 1,
-        x: 57, y: 76, w: 8, h: 18, whisper: "" },
       /* the glowing Moon Lotus on the far left of the pond */
       { id: "lotus-left", kind: "wonder", courage: 1,
         x: 15.7, y: 51.5, w: 9, h: 14, whisper: "" },
       /* the larger lotus nearer the middle of the pond */
-      { id: "lotus-mid", kind: "watch", courage: 1,
-        x: 34.5, y: 56, w: 7, h: 11, whisper: "" }
+      { id: "lotus-mid",  kind: "watch",  courage: 1,
+        x: 34.5, y: 56, w: 7, h: 11, whisper: "" },
+      /* the large glowing Moon Lotus, far right */
+      { id: "lotus-right", kind: "wonder", courage: 1,
+        x: 81.5, y: 64, w: 8, h: 14, whisper: "" },
+      /* the full moon (spare, extra courage) */
+      { id: "moon",       kind: "wonder", courage: 1,
+        x: 45.5, y: 3, w: 9, h: 18, whisper: "" }
     ],
     petal: { x: 77, y: 79 }
   },
@@ -67,6 +68,7 @@ const SCENES = [
     courageRequired: 5,
     petalHint: "A silver petal is hiding here",
     petalPoint: true,
+    hint: "Tap what catches your eye",
     hotspots: [
       /* the glowing silver orb and its trail */
       { id: "orb",      kind: "wonder", courage: 1,
@@ -87,7 +89,8 @@ const SCENES = [
     /* on the trunk of the big tree, right side, middle of the tree */
     petal: { x: 91, y: 31 }
   },
-  {
+  
+    {
     id: "clearing",
     title: "The Clearing",
     background: "images/scene-clearing.jpg",
@@ -95,6 +98,7 @@ const SCENES = [
     courageRequired: 5,
     petalHint: "Another silver petal is hiding here",
     petalPoint: true,
+    hint: "Tap what catches your eye",
     hotspots: [
       /* the mossy boulder, left */
       { id: "boulder",   kind: "watch",  courage: 1,
@@ -149,7 +153,7 @@ const SCENES = [
     lunelle: { src: "images/sprites/lunelle-hilltop.png", x: 10, bottom: 4, w: 28 },
     courageRequired: 5,
     petalHint: "Can you find the hidden petal?",
-     petalHintY: 28,
+    petalHintY: 28,
     hotspots: [
       /* the silver trail of light winding through the valley */
       { id: "trail",     kind: "wonder", courage: 1,
@@ -168,6 +172,7 @@ const SCENES = [
         x: 72, y: 54, w: 15, h: 17, whisper: "" }
     ],
     /* in the dark pine cluster, middle of the valley */
-petal: { x: 41, y: 59 }
+    petal: { x: 41, y: 59 }
   }
 ];
+
