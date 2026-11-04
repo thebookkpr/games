@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<!-- The Book Keeper's Library (site menu) — index.html V1.1 · Part 1 of 2
+<!-- The Book Keeper's Library (site menu) — index.html V1.2 · Part 1 of 2
+     V1.2: label position matched to the real book sprite (2:3).
      V1.1: pet art removed. Painted room background (images/library-bg.jpg) and a
            closed-book sprite per world (images/book-*.png) with the title as live text
            on the book's label plate. Missing sprite falls back to a CSS leather book.
@@ -133,7 +134,7 @@
     /* Fallback: if the sprite is missing, show a leather book drawn in CSS */
     .book.fallback .book-sprite { display: none; }
     .book.fallback .book-cover {
-      aspect-ratio: 3 / 4;
+      aspect-ratio: 2 / 3;
       background:
         linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0, rgba(0, 0, 0, 0) 14px),
         linear-gradient(145deg, #2f5a45, #1f3b2d);
@@ -146,7 +147,7 @@
     /* Placeholder: an empty space on the shelf, not clickable */
     .book.soon {
       justify-content: center;
-      aspect-ratio: 3 / 4;
+      aspect-ratio: 2 / 3;
       padding: 20px;
       font-style: italic;
       background: rgba(0, 0, 0, 0.22);
@@ -186,7 +187,7 @@
     <p class="library-tag">Choose a volume</p>
     <ul class="shelf" id="shelf"></ul>
     <p class="keeper">Kept by The Book Keeper</p>
-    <p class="version">V1.1</p>
+    <p class="version">V1.2</p>
   </main>
 
   <script>
@@ -200,7 +201,7 @@
         desc: "A quiet world of little lives and moonlit woods, where small pets find wonder close to home.",
         url: "burrow-whispers/",
         sprite: "images/book-burrow-whispers.png",
-        label: { top: 30, left: 22, w: 56, h: 18 }
+        label: { top: 26, left: 29, w: 49, h: 12 }
       }
     ];
     const SHOW_COMING_SOON = true;   /* set false to hide the empty space on the shelf */
@@ -215,7 +216,7 @@
     };
 
     WORLDS.forEach(w => {
-      const L = Object.assign({ top: 30, left: 22, w: 56, h: 18 }, w.label);
+      const L = Object.assign({ top: 26, left: 29, w: 49, h: 12 }, w.label);
       const li = el("li");
       const a = el("a", "book");
       a.href = w.url;
