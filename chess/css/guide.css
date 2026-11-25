@@ -1,0 +1,58 @@
+/*
+  PROJECT: Chess: Learn While You Play
+  FILE: css/guide.css
+  VERSION: 1.0.0
+  PART: 1 of 1
+  LOCATION: https://thebookkpr.github.io/games/chess/css/guide.css
+  NOTES: Piece summary strip, guide panel, tabs, lesson text, mini boards,
+         move history, and the guide-only screen.
+         Load order: variables, base, menu, board, guide, effects, layout.
+*/
+
+/* ---------- Piece summary strip ---------- */
+#pieceSummary{display:block;width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-size:14px;line-height:1.35}
+#pieceSummary:hover{border-color:var(--mute)}
+.pc{display:flex;gap:10px;align-items:center}
+.chip{flex:none;width:44px;height:44px;border-radius:6px;background:var(--lt);display:flex;align-items:center;justify-content:center;font-size:32px}
+.pc b{font-size:15px}
+.tag{display:inline-block;font-size:12px;padding:0 8px;border-radius:10px;border:1px solid var(--line);margin:3px 4px 0 0}
+.tag.bad{border-color:#d46a6a;color:#f0a0a0}
+.tag.good{border-color:#6aa88a;color:#a8dcc0}
+.more{color:var(--gold);font-size:13px;margin-top:3px}
+.hint{color:var(--mute)}
+
+/* ---------- Guide panel ---------- */
+#guidePanel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:14px;line-height:1.45}
+.guideTabs{display:flex;gap:6px;margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.tab{flex:1;background:#1c2438;border:1px solid var(--line);border-radius:4px;padding:6px 8px;font-size:14px}
+.tab.active{background:var(--dk);border-color:var(--dk)}
+#pieceList{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+#pieceList button{background:#1c2438;border:1px solid var(--line);border-radius:4px;padding:3px 9px;font-size:13px}
+#pieceList button.on{border-color:var(--gold);color:var(--gold)}
+
+/* ---------- Lesson text ---------- */
+#guideContent h2{margin:0 0 2px;font-size:20px}
+#guideContent h3{margin:12px 0 4px;font-size:14px;color:var(--gold);font-weight:600}
+#guideContent p{margin:0 0 6px}
+#guideContent ul{margin:0 0 6px;padding-left:20px}
+#guideContent li{margin-bottom:3px}
+
+/* ---------- Mini boards (diagrams) ---------- */
+.guideDiagram{margin:8px 0}
+.guideDiagram small{display:block;color:var(--mute);font-size:12px;line-height:1.35;margin-top:4px;max-width:212px}
+.mini{display:grid;grid-template:repeat(8,1fr)/repeat(8,1fr);width:212px;height:212px;border:3px solid #11172a;border-radius:3px}
+.mq{position:relative;background:var(--lt);display:flex;align-items:center;justify-content:center;font-size:21px}
+.mq.d{background:var(--dk)}
+.mq.mv::after{content:"";position:absolute;left:33%;top:33%;width:34%;height:34%;border-radius:50%;background:rgba(20,30,40,.45)}
+.mq.mv.cap::after{left:5%;top:5%;width:90%;height:90%;background:none;border:3px solid rgba(20,30,40,.5)}
+.mq.hl{background-image:linear-gradient(var(--hl),var(--hl))}
+.mq.chk{background-image:radial-gradient(circle,rgba(220,40,40,.85) 0,rgba(220,40,40,.2) 70%,transparent 75%)}
+
+/* ---------- Move history ---------- */
+#moveHistory div{display:grid;grid-template-columns:2.4em 1fr 1fr;gap:6px;padding:2px 0;font-size:15px}
+#moveHistory span{color:var(--mute)}
+
+/* ---------- Guide-only screen (from main menu) ---------- */
+#guideScreen{max-width:760px;margin:0 auto;padding:16px}
+#guideScreen header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+#guideScreen h1{margin:0;font-size:26px;font-weight:600}
