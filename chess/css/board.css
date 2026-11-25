@@ -1,0 +1,51 @@
+/*
+  PROJECT: Chess: Learn While You Play
+  FILE: css/board.css
+  VERSION: 1.0.0
+  PART: 1 of 1
+  LOCATION: https://thebookkpr.github.io/games/chess/css/board.css
+  NOTES: Game screen, top bar, status line, board, squares, highlights,
+         coordinates, promotion picker.
+         Load order: variables, base, menu, board, guide, effects, layout.
+*/
+
+/* ---------- Game screen ---------- */
+#gameScreen{background:var(--bg)}
+#topBar{display:flex;align-items:center;gap:12px}
+#gameStatus{font-size:17px;padding:8px 12px;background:#1c2438;border-left:4px solid var(--dk);border-radius:2px;min-height:44px;display:flex;align-items:center}
+#gameStatus.over{border-left-color:var(--gold)}
+#menuToggle,#guideToggle{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 14px;text-align:left}
+
+/* ---------- Board ---------- */
+#boardArea{display:flex;justify-content:center}
+#board{width:var(--sz);height:var(--sz);display:grid;grid-template:repeat(8,1fr)/repeat(8,1fr);border:6px solid #11172a;border-radius:4px;box-shadow:0 12px 40px rgba(0,0,0,.45);position:relative}
+
+/* ---------- Squares and pieces ---------- */
+.sq{position:relative;border:0;padding:0;margin:0;cursor:pointer;background-color:var(--lt);color:inherit;font:inherit;overflow:hidden}
+.sq.d{background-color:var(--dk)}
+.sq .g{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:calc(var(--sz)/8*.78);line-height:1;font-family:"Segoe UI Symbol","Apple Symbols","DejaVu Sans",sans-serif}
+.sq.w .g{color:#fffdf4;text-shadow:0 1px 0 #3b3326,0 -1px 0 #3b3326,1px 0 0 #3b3326,-1px 0 0 #3b3326,0 2px 3px rgba(0,0,0,.35)}
+.sq.b .g{color:#1b1f2c;text-shadow:0 1px 1px rgba(255,255,255,.25)}
+
+/* ---------- Square highlights ---------- */
+.sq.last{background-image:linear-gradient(var(--hl),var(--hl))}
+.sq.sel{background-image:linear-gradient(rgba(255,235,120,.8),rgba(255,235,120,.8))}
+.sq.chk{background-image:radial-gradient(circle,rgba(220,40,40,.85) 0,rgba(220,40,40,.2) 70%,transparent 75%)}
+.sq.mv::after{content:"";position:absolute;left:35%;top:35%;width:30%;height:30%;border-radius:50%;background:rgba(20,30,40,.35)}
+.sq.mv.cap::after{left:6%;top:6%;width:88%;height:88%;background:none;border:5px solid rgba(20,30,40,.35)}
+.sq:focus-visible{outline:3px solid #fff;outline-offset:-3px;z-index:2}
+
+/* ---------- Coordinates ---------- */
+.rk,.fl{position:absolute;font-size:calc(var(--sz)/8*.17);line-height:1;font-weight:700;opacity:.75;pointer-events:none}
+.rk{left:4%;top:4%}
+.fl{right:4%;bottom:4%}
+.sq.l .rk,.sq.l .fl{color:var(--dk)}
+.sq.d .rk,.sq.d .fl{color:var(--lt)}
+
+/* ---------- Promotion picker ---------- */
+#promo{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(20,26,42,.78);z-index:5}
+#promo.on{display:flex}
+#promo div{display:flex;gap:8px;background:var(--panel);padding:12px;border-radius:6px;border:1px solid var(--line)}
+#promo button{width:calc(var(--sz)/8*1.1);height:calc(var(--sz)/8*1.1);font-size:calc(var(--sz)/8*.8);line-height:1;background:var(--lt);border:0;border-radius:4px;font-family:"Segoe UI Symbol","Apple Symbols","DejaVu Sans",sans-serif}
+#promo button.w{color:#fffdf4;text-shadow:0 0 2px #000,0 0 2px #000}
+#promo button.b{color:#1b1f2c}
