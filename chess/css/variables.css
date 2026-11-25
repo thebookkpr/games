@@ -1,0 +1,26 @@
+/*
+  PROJECT: Chess: Learn While You Play
+  FILE: css/variables.css
+  VERSION: 1.0.0
+  PART: 1 of 1
+  LOCATION: https://thebookkpr.github.io/games/chess/css/variables.css
+  NOTES: Design tokens only. Load this file first.
+         Load order: variables, base, menu, board, guide, effects, layout.
+*/
+
+:root{
+  /* Colors */
+  --bg:#1c2333;
+  --panel:#252d42;
+  --line:#364061;
+  --ink:#e8ecf3;
+  --mute:#9aa6bd;
+  --lt:#d5dccb;
+  --dk:#60807b;
+  --gold:#e3c667;
+  --hl:rgba(236,200,80,.55);
+
+  /* Sizes */
+  --sz:min(92vw,70vh,640px);
+  --tb:52px;
+}
