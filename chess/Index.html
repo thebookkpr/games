@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!--
+  PROJECT: Chess Learning Game
+  FILE: index.html
+  VERSION: 1.0.0
+  PART: 1 of 1
+  LOCATION: https://thebookkpr.github.io/games/chess/
+  NOTES: Markup only. Styles live in /css, scripts live in /js.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1c2333">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Chess">
+<title>Chess: Learn While You Play</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- MAIN MENU -->
+<section id="mainMenu">
+  <div class="menu-card">
+    <h1>Chess</h1>
+    <p>Learn While You Play</p>
+    <button class="btn primary" id="playBtn">Play Game</button>
+    <button class="btn primary" id="guideBtn">Chess Guide</button>
+    <button class="btn primary" id="settingsBtn">Settings</button>
+    <button class="btn primary" id="aboutBtn">About</button>
+  </div>
+</section>
+
+<!-- GAME SCREEN -->
+<section id="gameScreen" hidden>
+  <header id="topBar">
+    <button id="menuToggle" aria-expanded="false">&#9776; Menu</button>
+    <div id="gameStatus" role="status" aria-live="polite"></div>
+  </header>
+
+  <main id="gameLayout">
+    <section id="boardArea">
+      <div id="board" role="grid" aria-label="Chess board"><div id="promo"><div></div></div></div>
+    </section>
+
+    <button id="pieceSummary" type="button"></button>
+
+    <section id="coach" aria-live="polite">
+      <div class="coachLabel">Chess Coach</div>
+      <b id="coachTitle"></b>
+      <p id="coachMsg"></p>
+    </section>
+
+    <button id="guideToggle" aria-expanded="false">Guide &#9660;</button>
+
+    <aside id="guidePanel">
+      <div class="guideTabs">
+        <button class="tab active" data-tab="pieces">Pieces</button>
+        <button class="tab" data-tab="rules">Rules</button>
+        <button class="tab" data-tab="moves">Moves</button>
+      </div>
+      <nav id="pieceList"></nav>
+      <article id="guideContent"></article>
+      <section id="moveHistory" hidden></section>
+    </aside>
+  </main>
+
+  <div id="menuBackdrop"></div>
+  <aside id="gameMenu" aria-label="Game menu">
+    <h2>Game Menu</h2>
+    <button class="btn" id="newGame">New Game</button>
+    <button class="btn" id="undoMove">Undo Move</button>
+    <button class="btn" id="flipBoard">Flip Board</button>
+    <button class="btn" id="openSettings">Settings</button>
+    <button class="btn" id="fullscreen">Full Screen</button>
+    <button class="btn" id="returnMainMenu">Return To Main Menu</button>
+  </aside>
+</section>
+
+<!-- GUIDE-ONLY SCREEN (from main menu) -->
+<section id="guideScreen" hidden>
+  <header>
+    <button class="btn" id="guideBack">&larr; Back</button>
+    <h1>Chess Guide</h1>
+  </header>
+  <div id="guideSlot"></div>
+</section>
+
+<!-- SETTINGS -->
+<dialog id="settingsDialog">
+  <h2>Settings</h2>
+  <label>Opponent
+    <select id="opponent">
+      <option value="2p">Human vs Human</option>
+      <option value="w">Computer (you play White)</option>
+      <option value="b" selected>Computer (you play Black)</option>
+    </select>
+  </label>
+  <small>Changing the opponent starts a new game.</small>
+  <label>Difficulty
+    <select id="difficulty">
+      <option value="1" selected>Easy</option>
+      <option value="2">Medium</option>
+      <option value="3">Hard</option>
+    </select>
+  </label>
+  <button class="btn" id="closeSettings">Close</button>
+</dialog>
+
+<!-- ABOUT -->
+<dialog id="aboutDialog">
+  <h2>About</h2>
+  <p>Learn chess while playing chess. The guide stays beside the board so you can read about any piece or rule without leaving your game.</p>
+  <button class="btn" id="closeAbout">Close</button>
+</dialog>
+
+<div id="toasts"></div>
+
+<!-- SCRIPTS (order matters) -->
+<script src="js/engine.js"></script>
+<script src="js/guide.js"></script>
+<script src="js/pieces-data.js"></script>
+<script src="js/rules-data.js"></script>
+<script src="js/coach.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
