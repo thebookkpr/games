@@ -1,0 +1,40 @@
+{
+  "x_project": "Chess Learning Game",
+  "x_file": "manifest.webmanifest",
+  "x_version": "1.0.0",
+  "x_part": "Part 1 of 1",
+  "id": "./",
+  "name": "Chess: Learn While You Play",
+  "short_name": "Chess",
+  "description": "Chess Learning Game: a chess app that teaches as you play, with a live coach, a built-in guide and achievements.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "any",
+  "background_color": "#1c2333",
+  "theme_color": "#1c2333",
+  "categories": ["games", "education"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
