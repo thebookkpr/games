@@ -1,0 +1,32 @@
+/*
+  PROJECT: Chess: Learn While You Play
+  FILE: css/base.css
+  VERSION: 1.0.0
+  PART: 1 of 1
+  LOCATION: https://thebookkpr.github.io/games/chess/css/base.css
+  NOTES: Reset, page defaults, shared buttons, shared piece glyphs.
+         Load order: variables, base, menu, board, guide, effects, layout.
+*/
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+
+html{background:var(--bg)}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:16px/1.5 "Iowan Old Style","Palatino Linotype",Georgia,serif;
+  overflow-x:hidden;
+}
+
+/* ---------- Buttons ---------- */
+button{font:inherit;color:var(--ink);cursor:pointer}
+.btn{font-size:16px;background:#1c2438;border:1px solid var(--line);border-radius:6px;padding:10px 14px;text-align:left}
+.btn:hover{border-color:var(--mute)}
+.btn.primary{background:var(--dk);border-color:var(--dk);text-align:center;font-size:18px;padding:14px}
+
+/* ---------- Piece glyphs (shared) ---------- */
+.gl{font-family:"Segoe UI Symbol","Apple Symbols","DejaVu Sans",sans-serif;line-height:1}
+.gl.w{color:#fffdf4;text-shadow:0 1px 0 #3b3326,0 -1px 0 #3b3326,1px 0 0 #3b3326,-1px 0 0 #3b3326}
+.gl.b{color:#1b1f2c;text-shadow:0 1px 1px rgba(255,255,255,.25)}
