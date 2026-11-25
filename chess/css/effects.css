@@ -1,0 +1,34 @@
+/*
+  PROJECT: Chess: Learn While You Play
+  FILE: css/effects.css
+  VERSION: 1.0.0
+  PART: 1 of 1
+  LOCATION: https://thebookkpr.github.io/games/chess/css/effects.css
+  NOTES: Chess Coach panel, coach pulse, achievement toasts, keyframe
+         animations, and the reduced-motion fallback.
+         Portrait positioning of the toasts is in layout.css.
+         Load order: variables, base, menu, board, guide, effects, layout.
+*/
+
+/* ---------- Chess Coach ---------- */
+#coach{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:6px;padding:8px 12px;font-size:14px;line-height:1.4}
+.coachLabel{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+#coachTitle{display:block;font-size:16px;color:var(--gold)}
+#coachMsg{margin:2px 0 0}
+#coach.pulse{animation:pulse .9s ease}
+
+/* ---------- Achievement toasts ---------- */
+#toasts{position:fixed;right:12px;bottom:12px;z-index:30;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:min(92vw,320px)}
+.toast{display:flex;gap:10px;align-items:center;background:#2e3858;border:1px solid var(--gold);border-radius:8px;padding:10px 12px;font-size:14px;line-height:1.3;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:toast 5s ease forwards}
+.toast .ti{font-size:26px;line-height:1}
+
+/* ---------- Animations ---------- */
+@keyframes pulse{0%{background:#34405f}100%{background:var(--panel)}}
+@keyframes toast{0%{opacity:0;transform:translateY(14px)}7%{opacity:1;transform:none}85%{opacity:1}100%{opacity:0}}
+@keyframes toastfade{0%,85%{opacity:1}100%{opacity:0}}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  .toast{animation:toastfade 5s linear forwards}
+  #coach.pulse{animation:none}
+}
