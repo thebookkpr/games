@@ -6,6 +6,7 @@
   PART: 1 of 1
   LOCATION: https://thebookkpr.github.io/games/chess/
   NOTES: Markup only. Styles live in /css, scripts live in /js.
+         CSS load order: variables, base, menu, board, guide, effects, layout.
 -->
 <html lang="en">
 <head>
@@ -20,7 +21,15 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="css/style.css">
+
+<!-- STYLES (order matters) -->
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/menu.css">
+<link rel="stylesheet" href="css/board.css">
+<link rel="stylesheet" href="css/guide.css">
+<link rel="stylesheet" href="css/effects.css">
+<link rel="stylesheet" href="css/layout.css">
 </head>
 <body>
 
