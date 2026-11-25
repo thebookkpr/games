@@ -1,0 +1,32 @@
+/*
+  PROJECT: Chess: Learn While You Play
+  FILE: css/menu.css
+  VERSION: 1.0.0
+  PART: 1 of 1
+  LOCATION: https://thebookkpr.github.io/games/chess/css/menu.css
+  NOTES: Main menu, in-game menu, backdrop, settings and about dialogs.
+         Slide-out and pop-up positioning of the game menu is in layout.css.
+         Load order: variables, base, menu, board, guide, effects, layout.
+*/
+
+/* ---------- Main menu ---------- */
+#mainMenu{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px}
+.menu-card{width:min(92vw,380px);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:28px 24px;display:flex;flex-direction:column;gap:12px;text-align:center}
+.menu-card h1{margin:0;font-size:44px;font-weight:600;letter-spacing:.04em}
+.menu-card p{margin:0 0 10px;color:var(--mute);font-style:italic}
+.menu-card .btn{text-align:center}
+
+/* ---------- Game menu ---------- */
+#gameMenu{background:var(--panel);display:flex;flex-direction:column;gap:10px}
+#gameMenu h2{margin:0 0 4px;font-size:20px}
+#menuBackdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s;z-index:15}
+#menuBackdrop.open{opacity:1;pointer-events:auto}
+
+/* ---------- Dialogs (Settings, About) ---------- */
+dialog{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:20px;width:min(92vw,360px)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+dialog h2{margin:0 0 12px}
+dialog label{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--mute);margin-bottom:12px}
+dialog select{font:inherit;font-size:16px;color:var(--ink);background:#1c2438;border:1px solid var(--line);border-radius:4px;padding:8px 10px}
+dialog small{display:block;color:var(--mute);margin-bottom:12px}
+dialog .btn{width:100%;text-align:center}
